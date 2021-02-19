@@ -1,0 +1,158 @@
+﻿using UwpWallpaper.Models;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Windows.Graphics.Imaging;
+using Windows.Storage;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
+using SqliteManager;
+using UwpWallpaper.Util;
+using CommonUtil;
+
+namespace UwpWallpaper.BingManager
+{
+    public class HttpManager
+    {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="date">时间，不写默认为今天</param>
+        /// <returns></returns>
+        public async static Task<SqliteManager.Models.WallpaperInfo> GetWallpaperInfoAsync(string date = "")
+        {
+            if (string.IsNullOrEmpty(date))
+            {
+                date = DateHelper.CurrentDateStr;
+            }
+
+            //先去数据库中查今天的数据是否已经存入
+            var wallinfo = SqlQuery.GetDaysWallpaperInfo(date);
+            if (wallinfo != null)
+                return wallinfo;
+
+            if (date == DateHelper.CurrentDateStr)
+            {
+                try
+                {
+                    //没有的话网络请求，一个是简介，一个是详情，都是获取今天的
+                    string archive = await DownloadHelper.GetTodayWallpaperAsync();
+                    string coverstory = await DownloadHelper.GetCoverstoryAsync();
+                    return SqlQuery.SaveBingWallpaperInfo(archive, coverstory);
+                }
+                catch(Exception ex)
+                {
+                    await new MessageHelper().ShowDialogAsync(LangResource.GetString("Tips"),LangResource.GetString("NetConnectError"));
+                    ULogger.Current.LogError("HttpManager", ex.Message);
+                    return null;
+                }
+            }
+
+            return null;
+        }
+
+        public async static Task<List<SqliteManager.Models.WallpaperInfo>> GetWallpaperInfosAsync(IList<string> dates)
+        {
+            List<SqliteManager.Models.WallpaperInfo> imglist = new List<SqliteManager.Models.WallpaperInfo>();
+
+            if (dates.Contains(DateHelper.CurrentDateStr))
+            {
+               await GetWallpaperInfoAsync();
+            }
+
+            imglist = SqlQuery.GetDaysWallpaperInfos(dates);
+
+            return imglist;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="imgdic">日期和url键值对</param>
+        /// <returns></returns>
+        public async static Task<Dictionary<string,BitmapImage>> GetBitmapImages(Dictionary<string,string> imgdic)
+        {
+            Dictionary<string, BitmapImage> bitmapImages = new Dictionary<string, BitmapImage>();
+            foreach(var kvp in imgdic)
+            {
+               var img = await GetImageOrSave(kvp.Key, kvp.Value);
+                if(img != null)
+                {
+                    bitmapImages.Add(kvp.Key, img);
+                }
+            }
+            return bitmapImages;
+        }
+
+        /// <summary>
+        /// 获取image数据
+        /// </summary>
+        /// <param name="dateNo"></param>
+        /// <param name="dwnUrl"></param>
+        /// <returns></returns>
+        public async static Task<BitmapImage> GetImageOrSave(string dateNo, string dwnUrl)
+        {
+            string filepath = Path.Combine(UwpBing.CurrentStorgePath, ConcatFile(dateNo, FileEnum.JPG));
+            System.Diagnostics.Debug.WriteLine(filepath);
+            if (File.Exists(filepath))
+            {
+                return new BitmapImage(new Uri(filepath));
+            }
+
+            return await DownloadImageFile(dateNo, dwnUrl);
+        }
+
+        /// <summary>
+        /// 网络请求image信息
+        /// </summary>
+        /// <param name="dateNo"></param>
+        /// <param name="dwnUrl"></param>
+        /// <returns></returns>
+        private async static Task<BitmapImage> DownloadImageFile(string dateNo, string dwnUrl)
+        {
+            await UwpBing.Folder.CreateBingdataFolderIfNotExist();
+
+            UwpBing ub = new UwpBing();
+            bool b = await ub.SavePicByBuffer(dateNo, dwnUrl);
+            if (b)
+            {
+                return new BitmapImage(new Uri(Path.Combine(UwpBing.CurrentStorgePath, $"{dateNo}.jpg")));
+            }
+            return null;
+        }
+
+        private static string ConcatFile(string filename, FileEnum file)
+        {
+            switch (file)
+            {
+                case  FileEnum.JSON:
+                    return filename + ".me";
+                case FileEnum.COVERSTORY:
+                    return filename + ".story";
+                case FileEnum.JPG:
+                    return filename + ".jpg";
+                default:
+                    return ".error";
+            }
+        }
+    }
+
+    public enum FileEnum
+    {
+        JSON,
+        COVERSTORY,
+        JPG
+    }
+    
+    public class ImageInfo : SqliteManager.Models.WallpaperInfo
+    {
+        public BitmapImage BitmapImage { get; set; }
+    }
+}

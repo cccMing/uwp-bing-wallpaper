@@ -1,0 +1,82 @@
+﻿<Page
+    x:Class="UwpWallpaper.Pages.Gallery"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UwpWallpaper.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:UwpWallpaper.ViewModels"
+    mc:Ignorable="d"
+    Loaded="Page_Loaded"
+    NavigationCacheMode="Required"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <MenuFlyout x:Key="ImageMenuFlyout">
+            <MenuFlyoutItem x:Uid="ViewSomePic_MenuItem_UsePhotoOpen" Click="Button_UsePhotoOpen" />
+            <MenuFlyoutItem x:Uid="ViewSomePic_MenuItem_SetAsDesktop" Click="Button_SetScreenBackground" />
+            <MenuFlyoutItem Name="DelFlyout" x:Uid="ViewSomePic_MenuItem_Delete" Click="Button_DelPicture" />
+        </MenuFlyout>
+
+        <Style TargetType="GridViewItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
+        <GridView x:Name="PhotoCollectionViewer" ItemsSource="{x:Bind ViewModel.GalleryList}" IsItemClickEnabled="True"
+                  ChoosingItemContainer="PhotoCollectionViewer_ChoosingItemContainer"
+                  HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+                <GridView.ItemContainerTransitions>
+                    <TransitionCollection />
+                </GridView.ItemContainerTransitions>
+
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Photo">
+                        <Grid x:Name="GalleryItem" PointerEntered="GalleryItem_PointerEntered"
+                          PointerExited="GalleryItem_PointerExited">
+                            <Border x:Name="Shadow" />
+                            <RelativePanel>
+                                <Image x:Name="Image" Source="{x:Bind ImageUri}" Height="147" Width="250" Margin="12" Tapped="Image_Tapped"
+                                  RightTapped="Image_RightTapped"  FlyoutBase.AttachedFlyout="{StaticResource ImageMenuFlyout}" Stretch="UniformToFill" />
+                                <Button Name="{x:Bind ImageId}" FontFamily="Segoe MDL2 Assets" Content="{x:Bind HeartSymbol}" RelativePanel.AlignBottomWithPanel="True"
+                                    RelativePanel.AlignRightWithPanel="True" Margin="10" BorderThickness="0" Background="Transparent"
+                                    FontSize="20" Foreground="Red" Click="{x:Bind HeartBtn_Click}" Style="{StaticResource CustomButtonStyle}" />
+                            </RelativePanel>
+                        </Grid>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <!--<ListView x:Name="listView"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Top"
+                      Background="#80000000">
+                <x:String>Item 1</x:String>
+                <x:String>Item 2</x:String>
+                <x:String>Item 3</x:String>
+                <x:String>Item 1</x:String>
+                <x:String>Item 2</x:String>
+                <x:String>Item 3</x:String>
+                <x:String>Item 1</x:String>
+                <x:String>Item 2</x:String>
+                <x:String>Item 3</x:String>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"
+                       Foreground="White" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>-->
+            <AppBarToggleButton Icon="Favorite" Label="Faovrite" Click="{x:Bind ViewModel.GetFavoriteImageListAsync}"
+                            HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+        </StackPanel>
+    </Grid>
+</Page>

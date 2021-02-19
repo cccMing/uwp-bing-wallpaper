@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppName" xml:space="preserve">
+    <value>Bing Wallpaper Gallery Demo✔</value>
+    <comment>Bing Wallpaper Gallery</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Cancel</comment>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>Close</comment>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Ok</value>
+    <comment>Ok</comment>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete all pictures?</value>
+    <comment>Are you sure you want to delete all pictures?</comment>
+  </data>
+  <data name="DelTipsDialog" xml:space="preserve">
+    <value>You can only delete data that is out of the last 15 days, and can not be retrieved after deletion. Are you sure you want to delete it?</value>
+    <comment>You can only delete data that is out of the last 15 days, and can not be retrieved after deletion. Are you sure you want to delete it?</comment>
+  </data>
+  <data name="MainPageNv_Explore.Content" xml:space="preserve">
+    <value>Explore</value>
+    <comment>Explore</comment>
+  </data>
+  <data name="MainPageNv_Favorite.Content" xml:space="preserve">
+    <value>Favorite</value>
+    <comment>Favorite</comment>
+  </data>
+  <data name="MainPageNv_Home.Content" xml:space="preserve">
+    <value>Home</value>
+    <comment>Home</comment>
+  </data>
+  <data name="MainPageNv_ViewWallpaper.Content" xml:space="preserve">
+    <value>View Wallpaper</value>
+    <comment>View Wallpaper</comment>
+  </data>
+  <data name="MainPage_AutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>Find Wallpaper</value>
+    <comment>Find Wallpaper</comment>
+  </data>
+  <data name="NavHeader.Text" xml:space="preserve">
+    <value>Welcome</value>
+    <comment>Welcome</comment>
+  </data>
+  <data name="NetConnectError" xml:space="preserve">
+    <value>The current network connection failed to get data</value>
+    <comment>The current network connection failed to get data</comment>
+  </data>
+  <data name="NoLimitedToSetDeskPic" xml:space="preserve">
+    <value>No permissions set to desktop wallpaper</value>
+    <comment>No permissions set to desktop wallpaper</comment>
+  </data>
+  <data name="OptionsTextBlock.Text" xml:space="preserve">
+    <value>Options</value>
+    <comment>Options</comment>
+  </data>
+  <data name="Rate_Flyout_Button.Content" xml:space="preserve">
+    <value>Review</value>
+    <comment>Review</comment>
+  </data>
+  <data name="Rate_Flyout_TextBlock.Text" xml:space="preserve">
+    <value>Go to Microsoft Store  ;-)</value>
+    <comment>The development of the application is inseparable from everyone's support and encouragement. ;-)</comment>
+  </data>
+  <data name="SaveFailed" xml:space="preserve">
+    <value>Failed to save</value>
+    <comment>Failed to save</comment>
+  </data>
+  <data name="SetFailed" xml:space="preserve">
+    <value>Setup failed</value>
+    <comment>Setup failed</comment>
+  </data>
+  <data name="SetImgAsBackground" xml:space="preserve">
+    <value>Set as background</value>
+    <comment>Set as background</comment>
+  </data>
+  <data name="SetImgAsLockScreen" xml:space="preserve">
+    <value>Set as lock screen</value>
+    <comment>Set as lock screen</comment>
+  </data>
+  <data name="SetSuccess" xml:space="preserve">
+    <value>Success</value>
+    <comment>Success</comment>
+  </data>
+  <data name="SettingLang.Text" xml:space="preserve">
+    <value>Language</value>
+    <comment>Language</comment>
+  </data>
+  <data name="Setting_AutoSetDestopWallpaper.Text" xml:space="preserve">
+    <value>Wallpaper</value>
+    <comment>Wallpaper</comment>
+  </data>
+  <data name="Setting_ClearCache.Content" xml:space="preserve">
+    <value>Clear Data</value>
+    <comment>Clear Data</comment>
+  </data>
+  <data name="Setting_CopyRight.Text" xml:space="preserve">
+    <value>Copyright</value>
+    <comment>Copyright</comment>
+  </data>
+  <data name="Setting_CopyRightInfo.Text" xml:space="preserve">
+    <value>The data source for all wallpapers of this application is from Microsoft Bing. It is for learning and communication only 🙂.</value>
+    <comment>The data source for all wallpapers of this application is from Microsoft Bing. It is for learning and communication only 🙂.</comment>
+  </data>
+  <data name="Setting_Explanation.Text" xml:space="preserve">
+    <value>Point</value>
+    <comment>Point</comment>
+  </data>
+  <data name="Setting_ExplanationInfo.Text" xml:space="preserve">
+    <value>Pictures and data are automatically downloaded when the computer is running, and a picture is taken daily. To view the path to the wallpaper and other information, right-click in the list and view it in the Photos app. Please feel free to comment in the store or give feedback.</value>
+    <comment>Pictures and data are automatically downloaded when the computer is running, and a picture is taken daily. To view the path to the wallpaper and other information, right-click in the list and view it in the Photos app. Please feel free to comment in the store or give feedback.</comment>
+  </data>
+  <data name="Setting_LangChangeTip.Text" xml:space="preserve">
+    <value>Effective after restart</value>
+    <comment>Effective after restart</comment>
+  </data>
+  <data name="Setting_LangCombobox.Header" xml:space="preserve">
+    <value>Language</value>
+    <comment>Language</comment>
+  </data>
+  <data name="Setting_OptionClick_Default" xml:space="preserve">
+    <value>Default</value>
+    <comment>Default</comment>
+  </data>
+  <data name="Setting_OptionClick_Ignore" xml:space="preserve">
+    <value>Ignore</value>
+    <comment>Ignore</comment>
+  </data>
+  <data name="Setting_OptionClick_UseSysPhoto" xml:space="preserve">
+    <value>Use System Photo</value>
+    <comment>Use System Photo</comment>
+  </data>
+  <data name="Setting_Storage.Text" xml:space="preserve">
+    <value>Storage</value>
+    <comment>Storage</comment>
+  </data>
+  <data name="Setting_Theme.Text" xml:space="preserve">
+    <value>Theme</value>
+    <comment>Theme</comment>
+  </data>
+  <data name="Setting_ToastNotify.Text" xml:space="preserve">
+    <value>Notification</value>
+    <comment>Notification</comment>
+  </data>
+  <data name="Setting_ToastState.OffContent" xml:space="preserve">
+    <value>Off</value>
+    <comment>Off</comment>
+  </data>
+  <data name="Setting_ToastState.OnContent" xml:space="preserve">
+    <value>On</value>
+    <comment>On</comment>
+  </data>
+  <data name="Setting_Version.Text" xml:space="preserve">
+    <value>Version</value>
+    <comment>Version</comment>
+  </data>
+  <data name="Setting_ViewClickEvent.Text" xml:space="preserve">
+    <value>View Click To</value>
+    <comment>View Click To</comment>
+  </data>
+  <data name="Setting_WallpaperToastState.OffContent" xml:space="preserve">
+    <value>Off</value>
+    <comment>Off</comment>
+  </data>
+  <data name="Setting_WallpaperToastState.OnContent" xml:space="preserve">
+    <value>Automatic desktop wallpaper is turned on</value>
+    <comment>Automatic desktop wallpaper is turned on</comment>
+  </data>
+  <data name="Tips" xml:space="preserve">
+    <value>Tips</value>
+    <comment>Tips</comment>
+  </data>
+  <data name="TodayImageUpdated" xml:space="preserve">
+    <value>Today's wallpaper updated ♪(^∇^*)</value>
+    <comment>Today's wallpaper updated ♪(^∇^*)</comment>
+  </data>
+  <data name="TryAgainLater" xml:space="preserve">
+    <value>Please try again later</value>
+    <comment>Please try again later</comment>
+  </data>
+  <data name="ViewSomePic_MenuItem_Delete.Text" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Delete</comment>
+  </data>
+  <data name="ViewSomePic_MenuItem_SetAsDesktop.Text" xml:space="preserve">
+    <value>Set as desktop wallpaper</value>
+    <comment>Set as desktop wallpaper</comment>
+  </data>
+  <data name="ViewSomePic_MenuItem_UsePhotoOpen.Text" xml:space="preserve">
+    <value>Use system Photo to open</value>
+    <comment>Use system Photo to open</comment>
+  </data>
+  <data name="WelcomeTextBlock.Text" xml:space="preserve">
+    <value>Welcome</value>
+    <comment>Welcome</comment>
+  </data>
+</root>
