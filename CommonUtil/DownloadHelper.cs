@@ -50,7 +50,7 @@ namespace CommonUtil
                                      .RetryAsync(3, (exception, retryCount, context) =>
                                      {
                                          // do something 
-                                         ULogger.Current.LogError("Polly Policy Retry", exception);
+                                         ULogger.Current.LogError($"Polly Policy Retry {retryCount}", exception);
                                      });
 
                     return await policy.ExecuteAsync(async () => await httpclient.GetStringAsync(uri));

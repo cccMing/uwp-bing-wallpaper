@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UwpWallpaper.BingManager;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -42,7 +43,7 @@ namespace UwpWallpaper
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            string path = await BingManager.FileManager.GetStorePath();
+            string path = await WallpaperManager.GetStorePath();
             IList<SqliteManager.Models.WallpaperInfo> walls = SqliteManager.SqlQuery.SuggestQuery(querykey);
 
             int count = 0;

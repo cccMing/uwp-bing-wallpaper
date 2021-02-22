@@ -24,8 +24,8 @@ namespace CommonUtil
                 return false;
             }
 
-            var filePath = await UwpBing.IsPicExist(imgId);
-            if (string.IsNullOrEmpty(filePath))
+            string filePath;
+            if (!UwpBing.IsPicExist(imgId, out filePath))
             {
                 return false;
             }

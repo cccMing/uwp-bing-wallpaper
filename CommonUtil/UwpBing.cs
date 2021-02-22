@@ -76,12 +76,11 @@ namespace CommonUtil
         /// </summary>
         /// <param name="path"></param>
         /// <returns>true 存在</returns>
-        public static async Task<bool> IsFileExist(string path)
+        public static bool IsFileExist(string path)
         {
             if (File.Exists(path))
             {
-                var filebytes = await File.ReadAllBytesAsync(path);
-                if (filebytes.Length > 0)//文件存在并且文件里面有数据
+                if (new FileInfo(path).Length > 0)//文件存在并且文件里面有数据
                 {
                     return true;
                 }
@@ -93,21 +92,23 @@ namespace CommonUtil
         /// 判断图片存在并且文件里面有数据
         /// </summary>
         /// <param name="picName"></param>
+        /// <param name="filePath">成功情况下的文件路径</param>
         /// <returns>图片路径</returns>
-        public static async Task<string> IsPicExist(string picName)
+        public static bool IsPicExist(string picName, out string filePath)
         {
             if (!picName.EndsWith(".jpg") && int.TryParse(picName, out var _))
             {
                 picName += ".jpg";
             }
 
-            var filePath = Path.Combine(CurrentStorgePath, picName);
-            if (await IsFileExist(filePath))
+            filePath = Path.Combine(CurrentStorgePath, picName);
+            if (IsFileExist(filePath))
             {
-                return filePath;
+                return true;
             }
 
-            return null;
+            filePath = null;
+            return false;
         }
     }
 }
