@@ -34,11 +34,10 @@ namespace BackgroundTasks
                 await UpdateTileAsync();
                 await DownLoadPrevMissiingWallpaperInfo();
                 await DownLoadPrevMissiingWallpaper();
-                //throw new Exception("xxxxxxeee");
             }
             catch (Exception ex)
             {
-                //异常不能 记录到日志
+                //异常不能 记录到日志，用nlog后已经解决，可能是配置路径问题
                 ULogger.Current.LogError("MyBackgroundTask Run", ex);
             }
 

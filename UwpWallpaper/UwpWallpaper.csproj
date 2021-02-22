@@ -165,9 +165,6 @@
     </AppxManifest>
     <PRIResource Include="Strings\en-US\Resources.resw" />
     <PRIResource Include="Strings\zh-CN\Resources.resw" />
-    <None Include="nlog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="UwpWallpaper_StoreKey.pfx" />
     <None Include="UwpWallpaper_TemporaryKey.pfx" />
   </ItemGroup>

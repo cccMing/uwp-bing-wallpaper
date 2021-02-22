@@ -126,8 +126,6 @@ namespace UwpWallpaper
 #endif
             #endregion
 
-            NLogger.InitNLogContext(); // set nlog config
-
             DatabaseManager.InitializeDatabase();
 
             RunBeforeSet.Setting();
