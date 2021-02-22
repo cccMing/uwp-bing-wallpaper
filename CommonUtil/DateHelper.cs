@@ -17,9 +17,9 @@ namespace CommonUtil
         /// <summary>
         /// 获取相应时间yyyyMMdd
         /// </summary>
-        /// <param name="daycout"></param>
+        /// <param name="dayOffset"></param>
         /// <returns></returns>
-        public static string GetDateStr(int daycout = 0) 
-            => DateTime.Now.AddDays(daycout).ToString("yyyyMMdd");
+        public static string GetDateStr(int dayOffset = 0) 
+            => DateTime.Now.AddDays(dayOffset).ToString("yyyyMMdd");
     }
 }

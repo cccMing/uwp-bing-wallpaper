@@ -19,10 +19,13 @@ namespace CommonUtil
         /// <returns></returns>
         public static async Task<bool> SetWallpaper(string imgId, BackgroundEnum eu)
         {
-            if (string.IsNullOrEmpty(imgId)) return false;
+            if (string.IsNullOrEmpty(imgId))
+            {
+                return false;
+            }
 
-            var filePath = Path.Combine(UwpBing.CurrentStorgePath, $"{imgId}.jpg");
-            if(!await UwpBing.IsFileExist(filePath))
+            var filePath = await UwpBing.IsPicExist(imgId);
+            if (string.IsNullOrEmpty(filePath))
             {
                 return false;
             }

@@ -64,6 +64,8 @@ namespace NotificationBackgroundTasks
 
             _cancelRequested = true;
 
+            ULogger.Current.Log($"{nameof(NotifyTask)} OnCanceled clicked");
+
             //Debug.WriteLine("Background " + sender.Task.Name + " Cancel Requested...");
         }
 

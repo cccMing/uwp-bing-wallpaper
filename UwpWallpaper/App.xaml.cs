@@ -42,7 +42,6 @@ namespace UwpWallpaper
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            DatabaseManager.InitializeDatabase();
         }
 
         /// <summary>
@@ -127,7 +126,12 @@ namespace UwpWallpaper
 #endif
             #endregion
 
+            NLogger.InitNLogContext(); // set nlog config
+
+            DatabaseManager.InitializeDatabase();
+
             RunBeforeSet.Setting();
+
             SetTitleBarStyle();
 
             InitWindow(skipWindowCreation: e.PrelaunchActivated);

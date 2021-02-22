@@ -50,7 +50,7 @@ namespace UwpWallpaper.BingManager
                 catch(Exception ex)
                 {
                     await new MessageHelper().ShowDialogAsync(LangResource.GetString("Tips"),LangResource.GetString("NetConnectError"));
-                    ULogger.Current.LogError("HttpManager", ex.Message);
+                    ULogger.Current.LogError("HttpManager", ex);
                     return null;
                 }
             }

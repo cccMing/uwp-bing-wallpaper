@@ -1,4 +1,5 @@
-﻿using Microsoft.Services.Store.Engagement;
+﻿using MetroLog;
+using Microsoft.Services.Store.Engagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,26 +12,26 @@ namespace CommonUtil
     {
         public static ULogger Current = new ULogger();
 
-        public void Log(string className, string info, LogLevel logLevel = LogLevel.Info)
+        public void Log(string info, LogLevel logLevel = LogLevel.Info, Exception ex = null)
         {
             ILogger log;
 #if !DEBUG
             log = new StoreLogger();
 #else
-            log = new MertoLogger();
+            log = new NLogger();
 #endif
             if (logLevel == LogLevel.Info)
             {
-                log.LogInfo($"{className}:{info}");
+                log.LogInfo($"{info}");
             }
             else
             {
-                log.LogError($"{className}:{info}");
+                log.LogError($"{info}", ex);
             }
         }
 
-        public void LogError(string className, string info)
-            => Log(className, info, LogLevel.Error);
+        public void LogError(string info, Exception ex)
+            => Log(info, LogLevel.Error, ex);
     }
 
     /// <summary>
@@ -44,7 +45,7 @@ namespace CommonUtil
 
     public interface ILogger
     {
-        void LogError(string eventName);
+        void LogError(string eventName, Exception ex);
 
         void LogInfo(string str);
     }
@@ -54,7 +55,7 @@ namespace CommonUtil
     /// </summary>
     public class StoreLogger : ILogger
     {
-        public void LogError(string eventName)
+        public void LogError(string eventName, Exception ex)
         {
             StoreServicesCustomEventLogger logger = StoreServicesCustomEventLogger.GetDefault();
             logger.Log(eventName);
@@ -68,14 +69,44 @@ namespace CommonUtil
 
     public class MertoLogger : ILogger
     {
-        public void LogError(string eventName)
+        private static Lazy<MetroLog.ILogger> Logger = new Lazy<MetroLog.ILogger>(
+            () =>
+            {
+                var logManager = LogManagerFactory.CreateLogManager();
+                var logger = logManager.GetLogger("UWPBing");
+                return logger;
+            });
+
+        public void LogError(string eventName, Exception ex)
         {
-            MetroLog.LogManagerFactory.CreateLogManager().GetLogger("UWPBing").Error(eventName);
+            Logger.Value.Error($"{eventName} -- {ex}");
         }
 
         public void LogInfo(string str)
         {
-            MetroLog.LogManagerFactory.CreateLogManager().GetLogger("UWPBing").Error(str);
+            Logger.Value.Error(str);
+        }
+    }
+
+    public class NLogger : ILogger
+    {
+        public static void InitNLogContext()
+        {
+            var storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            NLog.GlobalDiagnosticsContext.Set("LogPath", storageFolder.Path + "\\");
+        }
+
+        private static Lazy<NLog.Logger> Logger = new Lazy<NLog.Logger>(
+            () => NLog.LogManager.GetCurrentClassLogger());
+
+        public void LogError(string eventName, Exception ex)
+        {
+            Logger.Value.Error(ex, eventName);
+        }
+
+        public void LogInfo(string str)
+        {
+            Logger.Value.Info(str);
         }
     }
 }

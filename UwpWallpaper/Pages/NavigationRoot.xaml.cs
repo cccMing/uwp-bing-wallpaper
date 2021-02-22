@@ -46,7 +46,7 @@ namespace UwpWallpaper.Pages
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            ULogger.Current.Log("", "Navigation Page is Loaded");
+            ULogger.Current.Log($"NavigationRoot Navigation Page is Loaded");
             await _navigationService.NavigateToTodayImageAsync();
 
             await ActiveBackgroundTask();
@@ -101,7 +101,7 @@ namespace UwpWallpaper.Pages
                 TimeTrigger trigger = new TimeTrigger(16, false);
                 builder.SetTrigger(trigger);
                 BackgroundTaskRegistration task = builder.Register();
-                System.Diagnostics.Debug.WriteLine($"{builder.Name}已经注册成功");
+                ULogger.Current.Log($"NavigationRoot {builder.Name}已经注册成功");
             }
             return true;
         }
@@ -135,7 +135,8 @@ namespace UwpWallpaper.Pages
         private void RateBtn_Click(object sender, RoutedEventArgs e)
         {
 #if DEBUG
-            _navigationService.NavigateToTestAsync();
+            //_navigationService.NavigateToTestAsync();
+            _navigationService.NavigateToDebugWindow();
 #else
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
 #endif

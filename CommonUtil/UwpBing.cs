@@ -44,7 +44,7 @@ namespace CommonUtil
 
 #endif
             #region Picture Save
-            StorageFolder saveFolder = await UwpBing.Folder.CreateBingdataFolderIfNotExist();
+            StorageFolder saveFolder = await Folder.CreateBingdataFolderIfNotExist();
             StorageFile saveFile = await saveFolder.CreateFileAsync($"{picNo}.jpg", CreationCollisionOption.OpenIfExists);
             try
             {
@@ -56,7 +56,7 @@ namespace CommonUtil
                     IBuffer buffer = await http.GetBufferAsync(uri);
                     if (buffer.Length == 0)
                     {
-                        throw new Exception("get pic buffer empty");
+                        throw new Exception($"get pic buffer empty uri:{uri}");
                     }
                     await FileIO.WriteBufferAsync(saveFile, buffer);
                 }
@@ -64,7 +64,7 @@ namespace CommonUtil
             catch (Exception ex)
             {
                 await saveFile.DeleteAsync();
-                ULogger.Current.LogError("WallpaperDownload", ex.Message);
+                ULogger.Current.LogError("UwpBing WallpaperDownload", ex);
                 return false;
             }
             return true;
@@ -87,6 +87,27 @@ namespace CommonUtil
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// 判断图片存在并且文件里面有数据
+        /// </summary>
+        /// <param name="picName"></param>
+        /// <returns>图片路径</returns>
+        public static async Task<string> IsPicExist(string picName)
+        {
+            if (!picName.EndsWith(".jpg") && int.TryParse(picName, out var _))
+            {
+                picName += ".jpg";
+            }
+
+            var filePath = Path.Combine(CurrentStorgePath, picName);
+            if (await IsFileExist(filePath))
+            {
+                return filePath;
+            }
+
+            return null;
         }
     }
 }

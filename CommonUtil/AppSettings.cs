@@ -34,15 +34,21 @@ namespace CommonUtil
             }
         }
 
+        /// <summary>
+        /// 主题
+        /// </summary>
         public int Theme
         {
-            get => GetSettingValue<int>("Theme", (int)ElementTheme.Default);
+            get => GetSettingValue("Theme", (int)ElementTheme.Default);
             set => SetSettingValue("Theme", value);
         }
 
+        /// <summary>
+        /// 语言
+        /// </summary>
         public string Language
         {
-            get => GetSettingValue<string>("CurrentLanguage", Windows.System.UserProfile.GlobalizationPreferences.Languages.FirstOrDefault());
+            get => GetSettingValue("CurrentLanguage", Windows.System.UserProfile.GlobalizationPreferences.Languages.FirstOrDefault());
             set => SetSettingValue("CurrentLanguage", value);
         }
 
@@ -51,7 +57,7 @@ namespace CommonUtil
         /// </summary>
         public bool IsEnableToast
         {
-            get => GetSettingValue<bool>("IsEnableToast", true);
+            get => GetSettingValue("IsEnableToast", true);
             set => SetSettingValue("IsEnableToast", value);
         }
 
@@ -60,16 +66,16 @@ namespace CommonUtil
         /// </summary>
         public bool IsAutoSetDestopWallpaper
         {
-            get => GetSettingValue<bool>("IsAutoSetDestopWallpaper", false);
+            get => GetSettingValue("IsAutoSetDestopWallpaper", false);
             set => SetSettingValue("IsAutoSetDestopWallpaper", value);
         }
 
         /// <summary>
-        /// 最后一次通知日期
+        /// 最后一次弹出通知日期
         /// </summary>
         public string ToastDate
         {
-            get => GetSettingValue<string>("toastDate", "");
+            get => GetSettingValue("toastDate", "");
             set => SetSettingValue("toastDate", value);
         }
 
@@ -78,7 +84,7 @@ namespace CommonUtil
         /// </summary>
         public string WallpaperSetDate
         {
-            get => GetSettingValue<string>("WallpaperSetDate", "");
+            get => GetSettingValue("WallpaperSetDate", "");
             set => SetSettingValue("WallpaperSetDate", value);
         }
 
@@ -87,7 +93,7 @@ namespace CommonUtil
         /// </summary>
         public string LastOpenAppDate
         {
-            get => GetSettingValue<string>(nameof(LastOpenAppDate), DateTime.MinValue.ToString("yyyyMMdd"));
+            get => GetSettingValue(nameof(LastOpenAppDate), DateTime.MinValue.ToString("yyyyMMdd"));
             set => SetSettingValue(nameof(LastOpenAppDate), DateHelper.CurrentDateStr);
         }
         
@@ -110,7 +116,7 @@ namespace CommonUtil
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                ULogger.Current.LogError(nameof(GetSettingValue), ex);
                 return defaultValue;
             }
         }
@@ -128,7 +134,7 @@ namespace CommonUtil
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                ULogger.Current.LogError(nameof(SetSettingValue), ex);
             }
         }
     }

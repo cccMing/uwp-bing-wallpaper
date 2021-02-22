@@ -35,10 +35,10 @@ namespace CommonUtil
                 throw new ArgumentNullException("download url cannot be null");
             }
 
-            //uwp中用这个httpclient，还有个system.net.http
-            using (var httpclient = new Windows.Web.Http.HttpClient())
+            try
             {
-                try
+                //uwp中用这个httpclient，还有个system.net.http
+                using (var httpclient = new Windows.Web.Http.HttpClient())
                 {
                     var uri = new System.Uri(url);
 
@@ -50,15 +50,15 @@ namespace CommonUtil
                                      .RetryAsync(3, (exception, retryCount, context) =>
                                      {
                                          // do something 
-                                         ULogger.Current.LogError("DownloadHelper", exception.Message);
+                                         ULogger.Current.LogError("Polly Policy Retry", exception);
                                      });
 
                     return await policy.ExecuteAsync(async () => await httpclient.GetStringAsync(uri));
                 }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

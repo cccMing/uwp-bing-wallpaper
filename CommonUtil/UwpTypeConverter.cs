@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommonUtil
 {
-    public class UwpConverter
+    public class UwpTypeConverter
     {
         public static double ToDouble(string dec)
         {

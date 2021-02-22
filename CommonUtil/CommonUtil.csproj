@@ -128,7 +128,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="UtilExtend.cs" />
     <Compile Include="UwpBing.cs" />
-    <Compile Include="UwpConverter.cs" />
+    <Compile Include="UwpTypeConverter.cs" />
     <Compile Include="WallpaperSetting.cs" />
     <EmbeddedResource Include="Properties\CommonUtil.rd.xml" />
   </ItemGroup>
@@ -141,6 +141,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Services.Store.Engagement">
       <Version>10.1901.28001</Version>
+    </PackageReference>
+    <PackageReference Include="NLog">
+      <Version>4.7.7</Version>
     </PackageReference>
     <PackageReference Include="Polly">
       <Version>7.0.3</Version>

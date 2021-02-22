@@ -28,7 +28,7 @@ namespace BackgroundTasks
 
             try
             {
-                SqliteManager.Models.WallpaperInfo wallpaperInfo = await DownLoadTodayWallpaperIfNotExist();
+                SqliteManager.Models.WallpaperInfo wallpaperInfo = await DownloadTodayWallpaperIfNotExist();
                 ToastNotification(wallpaperInfo);
                 await SetDestopWallpaper();
                 await UpdateTileAsync();
@@ -39,7 +39,7 @@ namespace BackgroundTasks
             catch (Exception ex)
             {
                 //异常不能 记录到日志
-                ULogger.Current.LogError("MyBackgroundTask", ex.Message);
+                ULogger.Current.LogError("MyBackgroundTask Run", ex);
             }
 
             _deferral.Complete();
@@ -117,6 +117,8 @@ namespace BackgroundTasks
             var lastOpenDate = AppSettings.Current.LastOpenAppDate;
             var toastDate = AppSettings.Current.ToastDate;
 
+            ULogger.Current.Log($"{nameof(MyBackgroundTask)} ToastNotification [{isEnableToast}] [{lastOpenDate}] [{toastDate}]");
+
             string today = DateHelper.CurrentDateStr;
             if (!isEnableToast)
             {
@@ -185,7 +187,7 @@ namespace BackgroundTasks
             ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
         }
 
-        private async Task<SqliteManager.Models.WallpaperInfo> DownLoadTodayWallpaperIfNotExist()
+        private async Task<SqliteManager.Models.WallpaperInfo> DownloadTodayWallpaperIfNotExist()
         {
             //以下和主程序中第一次下载一样，有时间下载放一个程序集给两边调用
 
@@ -269,7 +271,7 @@ namespace BackgroundTasks
             }
             catch (Exception ex)
             {
-                ULogger.Current.LogError("DownLoadPrevMissiingWallpaperInfo", ex.Message);
+                ULogger.Current.LogError("MyBackgroundTask DownLoadPrevMissiingWallpaperInfo", ex);
                 return 0;
             }
 
