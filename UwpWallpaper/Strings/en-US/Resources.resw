@@ -222,7 +222,8 @@
     <comment>Copyright</comment>
   </data>
   <data name="Setting_CopyRightInfo.Text" xml:space="preserve">
-    <value>The data source for all wallpapers of this application is from Microsoft Bing. It is for learning and communication only 🙂.</value>
+    <value>The data source for all wallpapers of this application is from Microsoft Bing
+It is for learning and communication only.</value>
     <comment>The data source for all wallpapers of this application is from Microsoft Bing. It is for learning and communication only 🙂.</comment>
   </data>
   <data name="Setting_Explanation.Text" xml:space="preserve">

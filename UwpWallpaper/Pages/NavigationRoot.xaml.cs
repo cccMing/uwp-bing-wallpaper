@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Navigation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CommonUtil;
+using Windows.UI.ViewManagement;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -128,54 +129,37 @@ namespace UwpWallpaper.Pages
         }
 
         /// <summary>
-        /// show flyout
+        /// fullScreen click event
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RateBtn_Click(object sender, RoutedEventArgs e)
+        private void FullScreenBtn_Click(object sender, RoutedEventArgs e)
         {
-#if DEBUG
-            //_navigationService.NavigateToTestAsync();
-            _navigationService.NavigateToDebugWindow();
-#else
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-#endif
-        }
+            var view = ApplicationView.GetForCurrentView();
 
-        private async void ReviewApp_Button_Click(object sender, RoutedEventArgs e)
-        {
-            //https://docs.microsoft.com/zh-cn/windows/uwp/monetize/request-ratings-and-reviews
-
-            //使用跳转商店方式评论
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=9NW3XBW0D1MX"));
-            //if (await ReateApp())
-            //{
-
-            //}
-        }
-
-        /// <summary>
-        /// 内嵌在App中的评论页面
-        /// </summary>
-        /// <returns></returns>
-        private async Task<bool> ReateApp()
-        {
-            StoreSendRequestResult result = await StoreRequestHelper.SendRequestAsync(
-                    StoreContext.GetDefault(), 16, String.Empty);
-
-            if (result.ExtendedError == null)
+            view.VisibleBoundsChanged += (ApplicationView viewSender, object args) =>
             {
-                JObject jsonObject = JObject.Parse(result.Response);
-                if (jsonObject.SelectToken("status").ToString() == "success")
-                {
-                    // The customer rated or reviewed the app.
-                    return true;
+                if (!viewSender.IsFullScreenMode)
+                { // 全屏退出时，使导航条可见
+                    this.NaviStack.Visibility = Visibility.Visible;
                 }
+            };
+
+            var isFullScreen = false;
+
+            if (view.IsFullScreenMode)
+            {
+                view.ExitFullScreenMode();
+            }
+            else
+            {
+                isFullScreen = view.TryEnterFullScreenMode();
             }
 
-            // There was an error with the request, or the customer chose not to
-            // rate or review the app.
-            return false;
+            if (isFullScreen)
+            {
+                this.NaviStack.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }
