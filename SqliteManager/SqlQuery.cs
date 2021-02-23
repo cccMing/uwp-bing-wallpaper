@@ -67,7 +67,7 @@ namespace SqliteManager
             }
             catch { }
 
-            WallpaperInfo wallinfo = new WallpaperInfo()
+            WallpaperInfo wallinfo = new WallpaperInfo
             {
                 WallpaperNo = DateHelper.CurrentDateStr,
                 Title = converStory?.Title,
