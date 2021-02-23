@@ -54,12 +54,15 @@ namespace UwpWallpaper.Pages
             ActiveNotificationBackground();
         }
 
+        private string _lastSelectTag;
         private void NavigationBtn_Click(object sender, RoutedEventArgs e)
         {
             var frameworkElement = sender as FrameworkElement;
 
-            if (frameworkElement != null)
-                switch (frameworkElement.Tag.ToString())
+            var selectTag = frameworkElement?.Tag.ToString();
+            if (!string.IsNullOrEmpty(selectTag) && _lastSelectTag != selectTag)
+            {
+                switch (selectTag)
                 {
                     case "Today":
                         _navigationService.NavigateToTodayImageAsync();
@@ -73,6 +76,8 @@ namespace UwpWallpaper.Pages
                     default:
                         break;
                 }
+                _lastSelectTag = selectTag;
+            }
         }
 
 
