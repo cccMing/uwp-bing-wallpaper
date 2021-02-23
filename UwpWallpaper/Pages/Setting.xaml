@@ -81,6 +81,8 @@
         <!--存储-->
         <TextBlock x:Uid="Setting_Storage" Grid.Row="4" Style="{ThemeResource SettingHeaderStyle}" />
         <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+            <ProgressRing Name="StorageProgressRing" IsActive="True" Width="19" Height="19"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{x:Bind ViewModel.DataStorage, Mode=OneWay}" Style="{StaticResource SettingContentStyle}" />
             <Button x:Uid="Setting_ClearCache" Margin="10" Click="{x:Bind ViewModel.ClearCache_Click}" Visibility="Visible" />
         </StackPanel>

@@ -38,9 +38,13 @@ namespace UwpWallpaper
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                ViewModel.CalcAppStorage();
+                await ViewModel.CalcAppStorageAsync();
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    this.StorageProgressRing.Visibility = Visibility.Collapsed;
+                });
             });
         }
     }
