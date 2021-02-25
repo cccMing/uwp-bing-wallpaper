@@ -16,7 +16,7 @@ namespace SqliteManager
 {
     public class SqlQuery
     {
-        private static string path = Path.Combine(UwpBing.Folder.Path, "sqliteFavorite.db");
+        private static string path = Path.Combine(UwpBing.FolderPath, "sqliteFavorite.db");
 
         /// <summary>
         /// 现在没用到
@@ -74,8 +74,8 @@ namespace SqliteManager
                 CopyRight = archive.Images[0]?.Copyright,
                 Description = converStory?.Para1,
                 Attribute = converStory?.Attribute,
-                Longitude = UwpTypeConverter.ToDouble(converStory?.Longitude),
-                Latitude = UwpTypeConverter.ToDouble(converStory?.Latitude),
+                Longitude = Tools.ToDouble(converStory?.Longitude),
+                Latitude = Tools.ToDouble(converStory?.Latitude),
                 PicUrl = archive.Images[0]?.Url,
                 IsFavorite = false,
                 OriginData1 = data1,
@@ -128,8 +128,8 @@ namespace SqliteManager
                 CopyRight = imginfo?.Copyright,
                 Description = converStory?.Para1,
                 Attribute = converStory?.Attribute,
-                Longitude = UwpTypeConverter.ToDouble(converStory?.Longitude),
-                Latitude = UwpTypeConverter.ToDouble(converStory?.Latitude),
+                Longitude = Tools.ToDouble(converStory?.Longitude),
+                Latitude = Tools.ToDouble(converStory?.Latitude),
                 PicUrl = imginfo.Url,
                 IsFavorite = false,
                 OriginData1 = JsonConvert.SerializeObject(imginfo),

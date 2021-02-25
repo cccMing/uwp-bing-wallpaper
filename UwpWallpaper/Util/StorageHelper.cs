@@ -20,7 +20,7 @@ namespace UwpWallpaper.Util
         {
             try
             {
-                var mainpath = UwpBing.Folder.Path;
+                var mainpath = UwpBing.FolderPath;
                 folderList.Add(mainpath);//当前目录
                 await GetFoldersPath(mainpath);//当前目录下文件夹
 
@@ -86,7 +86,7 @@ namespace UwpWallpaper.Util
         public async Task DeleteAppCache()
         {
             //var statePath = UwpBing.Folder.Path;
-            await (await StorageFolder.GetFolderFromPathAsync(UwpBing.CurrentStorgePath)).DeleteAsync();
+            await (await StorageFolder.GetFolderFromPathAsync(UwpBing.PicFolderPath)).DeleteAsync();
             //await (await StorageFile.GetFileFromPathAsync(statePath)).DeleteAsync();
         }
     }

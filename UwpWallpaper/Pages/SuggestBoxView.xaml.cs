@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonUtil;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -43,7 +44,6 @@ namespace UwpWallpaper
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            string path = await WallpaperManager.GetStorePath();
             IList<SqliteManager.Models.WallpaperInfo> walls = SqliteManager.SqlQuery.SuggestQuery(querykey);
 
             int count = 0;
@@ -55,7 +55,7 @@ namespace UwpWallpaper
                 }
                 listInfo.Add(new SqliteManager.Models.WallpaperInfo
                 {
-                    WallpaperNo = Path.Combine(path, i.WallpaperNo + ".jpg"),
+                    WallpaperNo = Path.Combine(UwpBing.PicFolderPath, i.WallpaperNo + ".jpg"),
                     Title = i.Title + "(" + i.WallpaperNo + ")",
                     Description = i.Description,
                     CopyRight = i.CopyRight,

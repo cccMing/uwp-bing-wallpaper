@@ -121,14 +121,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
-    <Compile Include="ConstantObj.cs" />
     <Compile Include="DateHelper.cs" />
     <Compile Include="DownloadHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="UtilExtend.cs" />
+    <Compile Include="BingExtension.cs" />
     <Compile Include="UwpBing.cs" />
-    <Compile Include="UwpTypeConverter.cs" />
+    <Compile Include="Tools.cs" />
     <Compile Include="WallpaperSetting.cs" />
     <EmbeddedResource Include="Properties\CommonUtil.rd.xml" />
   </ItemGroup>

@@ -71,10 +71,8 @@ namespace NotificationBackgroundTasks
 
         private async Task SetDesktopWallpaper(string imgId)
         {
-            var path = UwpBing.Folder.Path;
-
             //获取文件
-            Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromPathAsync(Path.Combine(path, ConstantObj.BINGFOLDER, $"{imgId}.jpg"));
+            Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromPathAsync(Path.Combine(UwpBing.PicFolderPath, $"{imgId}.jpg"));
             //设置背景
             Windows.System.UserProfile.UserProfilePersonalizationSettings setting = Windows.System.UserProfile.UserProfilePersonalizationSettings.Current;
             bool b = await setting.TrySetWallpaperImageAsync(file);

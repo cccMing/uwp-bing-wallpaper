@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Streams;
 
@@ -12,16 +13,32 @@ namespace CommonUtil
     public class UwpBing
     {
         /// <summary>
+        /// 图片存放所在文件夹名
+        /// </summary>
+        public const string BING_FOLDER = "bingdata";
+
+        /// <summary>
         /// 获取本地应用程序数据存储区中的根文件夹。 文件夹已备份到云。
         /// </summary>
         public static StorageFolder Folder
             => ApplicationData.Current.LocalFolder;
 
         /// <summary>
+        /// 应用数据存储路径
+        /// </summary>
+        public static string FolderPath
+            => Folder.Path;
+
+        public static IAsyncOperation<StorageFolder> GetPicStorageFolder()
+        {
+            return Folder.CreateFolderAsync(BING_FOLDER, CreationCollisionOption.OpenIfExists);
+        }
+
+        /// <summary>
         /// 图片文件存放路径xxx\LocalState\bingdata
         /// </summary>
-        public static string CurrentStorgePath
-            => Path.Combine(UwpBing.Folder.Path, ConstantObj.BINGFOLDER);
+        public static string PicFolderPath
+            => Path.Combine(FolderPath, BING_FOLDER);
 
         /// <summary>
         /// 以buffer的形式写入图片信息
@@ -44,8 +61,8 @@ namespace CommonUtil
 
 #endif
             #region Picture Save
-            StorageFolder saveFolder = await Folder.CreateBingdataFolderIfNotExist();
-            StorageFile saveFile = await saveFolder.CreateFileAsync($"{picNo}.jpg", CreationCollisionOption.OpenIfExists);
+            var picStorageFolder = await GetPicStorageFolder();
+            StorageFile saveFile = await picStorageFolder.CreateFileAsync($"{picNo}.jpg", CreationCollisionOption.OpenIfExists);
             try
             {
                 string downloadUrl = url.GetFullDownloadPicUrl();
@@ -101,7 +118,7 @@ namespace CommonUtil
                 picName += ".jpg";
             }
 
-            filePath = Path.Combine(CurrentStorgePath, picName);
+            filePath = Path.Combine(PicFolderPath, picName);
             if (IsFileExist(filePath))
             {
                 return true;

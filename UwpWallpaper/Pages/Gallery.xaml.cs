@@ -42,9 +42,9 @@ namespace UwpWallpaper.Pages
             this.InitializeComponent();
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            await ViewModel.GetImageListAsync();
+            ViewModel.GetImageListAsync();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
