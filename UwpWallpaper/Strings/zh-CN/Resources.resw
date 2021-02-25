@@ -302,6 +302,10 @@
     <value>请稍后再试</value>
     <comment>请稍后再试</comment>
   </data>
+  <data name="ViewSomePic_MenuItem_4kDownload.Text" xml:space="preserve">
+    <value>4K 下载</value>
+    <comment>4K 下载</comment>
+  </data>
   <data name="ViewSomePic_MenuItem_Delete.Text" xml:space="preserve">
     <value>删除</value>
     <comment>删除</comment>

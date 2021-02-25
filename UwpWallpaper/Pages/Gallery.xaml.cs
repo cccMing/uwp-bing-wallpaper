@@ -6,6 +6,7 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using UwpWallpaper.BingManager;
 using UwpWallpaper.Pages.UserControls;
 using UwpWallpaper.Services.Navigation;
 using UwpWallpaper.Util;
@@ -30,7 +31,7 @@ namespace UwpWallpaper.Pages
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class Gallery : Page,IPageWithViewModel<GalleryViewModel>
+    public sealed partial class Gallery : Page, IPageWithViewModel<GalleryViewModel>
     {
         private int _animationDuration = 400;
         private Compositor _compositor;
@@ -294,6 +295,27 @@ namespace UwpWallpaper.Pages
             };
 
             await imgDialog.ShowAsync();
+        }
+
+        private async void Button_4kDownload(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var flyoutItem = sender as Windows.UI.Xaml.Controls.MenuFlyoutItem;
+                string imgUri = (flyoutItem.DataContext as Photo).ImageUri;
+
+                var imgId = Path.GetFileNameWithoutExtension(imgUri);
+
+                var wallpaperInfo = await HttpManager.GetWallpaperInfoAsync(imgId);
+                var downloadUrl = wallpaperInfo.PicUrl.GetFullDownloadPicUrl();
+                var UHDUrl = downloadUrl.Replace("1920x1080", "UHD");
+
+                Windows.System.Launcher.LaunchUriAsync(new Uri(UHDUrl));
+            }
+            catch (Exception ex)
+            {
+                ULogger.Current.LogError("Button_4kDownload", ex);
+            }
         }
     }
 }

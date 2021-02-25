@@ -302,6 +302,10 @@ It is for learning and communication only.</value>
     <value>Please try again later</value>
     <comment>Please try again later</comment>
   </data>
+  <data name="ViewSomePic_MenuItem_4kDownload.Text" xml:space="preserve">
+    <value>4K Download</value>
+    <comment>4K Download</comment>
+  </data>
   <data name="ViewSomePic_MenuItem_Delete.Text" xml:space="preserve">
     <value>Delete</value>
     <comment>Delete</comment>
