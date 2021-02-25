@@ -98,7 +98,7 @@ namespace UwpWallpaper.BingManager
         public async static Task<BitmapImage> GetImageOrSave(string dateNo, string dwnUrl)
         {
             string filepath = Path.Combine(UwpBing.PicFolderPath, ConcatFile(dateNo, FileEnum.JPG));
-            ULogger.Current.Log(filepath);
+            //ULogger.Current.Log(filepath);
             if (File.Exists(filepath))
             {
                 return new BitmapImage(new Uri(filepath));
