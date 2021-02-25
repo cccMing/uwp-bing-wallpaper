@@ -1,10 +1,5 @@
-﻿using MetroLog;
-using Microsoft.Services.Store.Engagement;
+﻿using Microsoft.Services.Store.Engagement;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CommonUtil
 {
@@ -64,27 +59,6 @@ namespace CommonUtil
         public void LogInfo(string str)
         {
             //throw new NotImplementedException();
-        }
-    }
-
-    public class MertoLogger : ILogger
-    {
-        private static Lazy<MetroLog.ILogger> Logger = new Lazy<MetroLog.ILogger>(
-            () =>
-            {
-                var logManager = LogManagerFactory.CreateLogManager();
-                var logger = logManager.GetLogger("UWPBing");
-                return logger;
-            });
-
-        public void LogError(string eventName, Exception ex)
-        {
-            Logger.Value.Error($"{eventName} -- {ex}");
-        }
-
-        public void LogInfo(string str)
-        {
-            Logger.Value.Error(str);
         }
     }
 
