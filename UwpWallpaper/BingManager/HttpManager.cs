@@ -44,8 +44,10 @@ namespace UwpWallpaper.BingManager
                 {
                     //没有的话网络请求，一个是简介，一个是详情，都是获取今天的
                     string archive = await DownloadHelper.GetTodayWallpaperAsync();
+#if FALSE // 现在这个数据没有了
                     string coverstory = await DownloadHelper.GetCoverstoryAsync();
-                    return SqlQuery.SaveBingWallpaperInfo(archive, coverstory);
+#endif
+                    return SqlQuery.SaveBingWallpaperInfo(archive, null);
                 }
                 catch (Exception ex)
                 {

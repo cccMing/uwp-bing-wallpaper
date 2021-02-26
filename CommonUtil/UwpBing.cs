@@ -61,22 +61,19 @@ namespace CommonUtil
 
 #endif
             #region Picture Save
+
             var picStorageFolder = await GetPicStorageFolder();
             StorageFile saveFile = await picStorageFolder.CreateFileAsync($"{picNo}.jpg", CreationCollisionOption.OpenIfExists);
             try
             {
                 string downloadUrl = url.GetFullDownloadPicUrl();
-                Uri uri = new Uri(downloadUrl);
 
-                using (Windows.Web.Http.HttpClient http = new Windows.Web.Http.HttpClient())
+                var buffer = await DownloadHelper.HttpGetBufferAsync(downloadUrl);
+                if (buffer.Length == 0)
                 {
-                    IBuffer buffer = await http.GetBufferAsync(uri);
-                    if (buffer.Length == 0)
-                    {
-                        throw new Exception($"get pic buffer empty uri:{uri}");
-                    }
-                    await FileIO.WriteBufferAsync(saveFile, buffer);
+                    throw new Exception($"get pic buffer empty: {downloadUrl}");
                 }
+                await FileIO.WriteBufferAsync(saveFile, buffer);
             }
             catch (Exception ex)
             {
@@ -85,6 +82,7 @@ namespace CommonUtil
                 return false;
             }
             return true;
+
             #endregion
         }
 

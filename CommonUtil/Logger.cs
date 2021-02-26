@@ -10,7 +10,7 @@ namespace CommonUtil
         public void Log(string info, LogLevel logLevel = LogLevel.Info, Exception ex = null)
         {
             ILogger log;
-#if !DEBUG
+#if FALSE
             log = new StoreLogger();
 #else
             log = new NLogger();

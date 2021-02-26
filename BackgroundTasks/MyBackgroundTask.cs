@@ -204,8 +204,10 @@ namespace BackgroundTasks
             {
                 //没有的话网络请求
                 string archive = await DownloadHelper.GetTodayWallpaperAsync();
+#if FALSE
                 string coverstory = await DownloadHelper.GetCoverstoryAsync();
-                allinfo = SqlQuery.SaveBingWallpaperInfo(archive, coverstory);
+#endif
+                allinfo = SqlQuery.SaveBingWallpaperInfo(archive, null);
             }
             catch (Exception)
             {
@@ -280,24 +282,6 @@ namespace BackgroundTasks
             return 1;
         }
 
-        /// <summary>
-        /// 判断文件存在并且文件里面有数据
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private async Task<bool> IsFileExist(string path)
-        {
-            if (File.Exists(path))
-            {
-                var filebytes = await File.ReadAllBytesAsync(path);
-                if (filebytes.Length > 0)//文件存在并且文件里面有数据
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         private async Task DownloadPrevMissingWallpaper()
         {
             IList<string> days = new List<string>();
@@ -311,14 +295,14 @@ namespace BackgroundTasks
                 }
 
                 //图片不存在的情况下
-                #region Picture Save
+#region Picture Save
                 SqliteManager.Models.WallpaperInfo winfo = SqlQuery.GetDaysWallpaperInfo(day);
                 if (!string.IsNullOrEmpty(winfo?.PicUrl))
                 {
                     UwpBing ub = new UwpBing();
                     bool result = await ub.SavePicByBuffer(day, winfo.PicUrl);
                 }
-                #endregion 
+#endregion
             }
         }
 
