@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using SqliteManager;
 using UwpWallpaper.Util;
 using CommonUtil;
+using SqliteManager.Models;
 
 namespace UwpWallpaper.BingManager
 {
@@ -26,7 +27,7 @@ namespace UwpWallpaper.BingManager
         /// </summary>
         /// <param name="date">时间，不写默认为今天</param>
         /// <returns></returns>
-        public async static Task<SqliteManager.Models.WallpaperInfo> GetWallpaperInfoAsync(string date = "")
+        public async static Task<WallpaperInfoPo> GetWallpaperInfoAsync(string date = "")
         {
             if (string.IsNullOrEmpty(date))
             {
@@ -60,7 +61,7 @@ namespace UwpWallpaper.BingManager
             return null;
         }
 
-        public async static Task<List<SqliteManager.Models.WallpaperInfo>> GetWallpaperInfosAsync(IList<string> dates)
+        public async static Task<List<WallpaperInfoPo>> GetWallpaperInfosAsync(IList<string> dates)
         {
             if (dates.Contains(DateHelper.CurrentDateStr))
             {
@@ -149,7 +150,7 @@ namespace UwpWallpaper.BingManager
         JPG
     }
 
-    public class ImageInfo : SqliteManager.Models.WallpaperInfo
+    public class ImageInfo : WallpaperInfoPo
     {
         public BitmapImage BitmapImage { get; set; }
     }

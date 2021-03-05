@@ -60,7 +60,7 @@ namespace UwpWallpaper.ViewModels
         private async Task GetWallpaperInfoByDays(IList<string> days)
         {
 
-            List<WallpaperInfo> wallpaperInfos = await HttpManager.GetWallpaperInfosAsync(days);
+            List<WallpaperInfoPo> wallpaperInfos = await HttpManager.GetWallpaperInfosAsync(days);
 
             foreach (var i in wallpaperInfos)
             {
@@ -83,7 +83,7 @@ namespace UwpWallpaper.ViewModels
 
     public class ImageInfo : ObservableObject
     {
-        public ImageInfo(WallpaperInfo wallpaperInfo, BitmapImage bi)
+        public ImageInfo(WallpaperInfoPo wallpaperInfo, BitmapImage bi)
         {
             ImageUri = bi;
             this._imgNo = wallpaperInfo.WallpaperNo;

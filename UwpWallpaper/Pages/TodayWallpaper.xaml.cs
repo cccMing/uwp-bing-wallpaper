@@ -53,7 +53,7 @@ namespace UwpWallpaper
         {
             this.MyProgressRing.Visibility = Visibility.Visible;
 
-            WallpaperInfo winfo;
+            WallpaperInfoPo winfo;
             try
             {
                 //页面加载完获取今日壁纸数据

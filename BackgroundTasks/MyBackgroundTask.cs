@@ -1,17 +1,14 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+﻿using CommonUtil;
+using Microsoft.QueryStringDotNET;
+using Microsoft.Toolkit.Uwp.Notifications;
+using SqliteManager;
+using SqliteManager.Models;
 using System;
-using System.IO;
-using System.Net.Http;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
-using Windows.Storage;
-using Windows.Storage.Streams;
-using Windows.UI.Notifications;
-using SqliteManager;
-using System.Collections.Generic;
-using Microsoft.QueryStringDotNET;
 using Windows.ApplicationModel.Resources;
-using CommonUtil;
+using Windows.UI.Notifications;
 
 namespace BackgroundTasks
 {
@@ -28,12 +25,12 @@ namespace BackgroundTasks
 
             try
             {
-                SqliteManager.Models.WallpaperInfo wallpaperInfo = await DownloadTodayWallpaperIfNotExist();
+                WallpaperInfoPo wallpaperInfo = await DownloadTodayWallpaperIfNotExist();
                 ToastNotification(wallpaperInfo);
-                await SetDestopWallpaper();
+                await SetDestopWallpaperAsync();
                 UpdateTile();
-                await DownloadPrevMissingWallpaperInfo();
-                await DownloadPrevMissingWallpaper();
+                await DownloadPrevMissingWallpaperInfoAsync();
+                await DownloadPrevMissingWallpaperAsync();
             }
             catch (Exception ex)
             {
@@ -106,7 +103,7 @@ namespace BackgroundTasks
         /// windows通知
         /// </summary>
         /// <param name="wallpaperInfo"></param>
-        private void ToastNotification(SqliteManager.Models.WallpaperInfo wallpaperInfo)
+        private void ToastNotification(WallpaperInfoPo wallpaperInfo)
         {
             if (wallpaperInfo == null)
             {
@@ -189,7 +186,7 @@ namespace BackgroundTasks
             ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
         }
 
-        private async Task<SqliteManager.Models.WallpaperInfo> DownloadTodayWallpaperIfNotExist()
+        private async Task<WallpaperInfoPo> DownloadTodayWallpaperIfNotExist()
         {
             //以下和主程序中第一次下载一样，有时间下载放一个程序集给两边调用
 
@@ -199,7 +196,7 @@ namespace BackgroundTasks
             if (wallinfo != null)
                 return wallinfo;
 
-            SqliteManager.Models.WallpaperInfo allinfo;
+            WallpaperInfoPo allinfo;
             try
             {
                 //没有的话网络请求
@@ -225,7 +222,7 @@ namespace BackgroundTasks
             return result ? allinfo : null;
         }
 
-        private async Task<bool> SetDestopWallpaper()
+        private async Task<bool> SetDestopWallpaperAsync()
         {
             if (AppSettings.Current.WallpaperSetDate == DateHelper.CurrentDateStr)
             {
@@ -237,14 +234,14 @@ namespace BackgroundTasks
             }
 
             AppSettings.Current.WallpaperSetDate = DateHelper.CurrentDateStr;
-            return await WallpaperSetting.SetWallpaper(DateHelper.CurrentDateStr, BackgroundEnum.Destop);
+            return await WallpaperSetting.SetWallpaperAsync(DateHelper.CurrentDateStr, BackgroundEnum.Destop);
         }
 
         /// <summary>
         /// 下载之前缺失的图片数据库信息 最多14天
         /// </summary>
         /// <returns></returns>
-        private async Task<int> DownloadPrevMissingWallpaperInfo()
+        private async Task<int> DownloadPrevMissingWallpaperInfoAsync()
         {
             IList<string> dayMissings = getMissingDays();
             if (dayMissings.Count == 0)
@@ -282,9 +279,8 @@ namespace BackgroundTasks
             return 1;
         }
 
-        private async Task DownloadPrevMissingWallpaper()
+        private async Task DownloadPrevMissingWallpaperAsync()
         {
-            IList<string> days = new List<string>();
             for (var i = 0; i <= 14; i++)
             {
                 var day = DateHelper.GetDateStr(-1 * i);
@@ -295,8 +291,8 @@ namespace BackgroundTasks
                 }
 
                 //图片不存在的情况下
-#region Picture Save
-                SqliteManager.Models.WallpaperInfo winfo = SqlQuery.GetDaysWallpaperInfo(day);
+                #region Picture Save
+                WallpaperInfoPo winfo = SqlQuery.GetDaysWallpaperInfo(day);
                 if (!string.IsNullOrEmpty(winfo?.PicUrl))
                 {
                     UwpBing ub = new UwpBing();

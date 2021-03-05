@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.System.UserProfile;
@@ -17,7 +13,7 @@ namespace CommonUtil
         /// <param name="imgId"></param>
         /// <param name="eu"></param>
         /// <returns></returns>
-        public static async Task<bool> SetWallpaper(string imgId, BackgroundEnum eu)
+        public static async Task<bool> SetWallpaperAsync(string imgId, BackgroundEnum eu)
         {
             if (string.IsNullOrEmpty(imgId))
             {

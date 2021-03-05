@@ -1,16 +1,12 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using CommonUtil;
+using Newtonsoft.Json;
 using SQLite.Net;
+using SQLite.Net.Platform.WinRT;
 using SqliteManager.Models;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SQLite.Net.Platform.WinRT;
 using System.IO;
-using Newtonsoft.Json;
-using CommonUtil;
+using System.Linq;
 
 namespace SqliteManager
 {
@@ -23,14 +19,14 @@ namespace SqliteManager
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static List<WallpaperInfo> SuggestQuery(string s)
+        public static List<WallpaperInfoPo> SuggestQuery(string s)
         {
             string likequery = s.Replace("[", "[[]").Replace("%", "[%]");
             likequery = "%" + likequery + "%";
 
             using (var conn = new SQLiteConnection(new SQLitePlatformWinRT(), path))
             {
-                var query = conn.Query<WallpaperInfo>(@"SELECT title,
+                var query = conn.Query<WallpaperInfoPo>(@"SELECT title,
                                                         wallpaperno,
                                                         attribute,
                                                         copyright,
@@ -50,7 +46,7 @@ namespace SqliteManager
         /// </summary>
         /// <param name="data1">Archive</param>
         /// <param name="data2">CoverStory</param>
-        public static WallpaperInfo SaveBingWallpaperInfo(string data1, string data2)
+        public static WallpaperInfoPo SaveBingWallpaperInfo(string data1, string data2)
         {
             var info = GetDaysWallpaperInfo(DateHelper.CurrentDateStr);
             if (info != null)
@@ -67,7 +63,7 @@ namespace SqliteManager
             }
             catch { }
 
-            WallpaperInfo wallinfo = new WallpaperInfo
+            WallpaperInfoPo wallinfo = new WallpaperInfoPo
             {
                 WallpaperNo = DateHelper.CurrentDateStr,
                 Title = converStory?.Title,
@@ -119,9 +115,9 @@ namespace SqliteManager
             return retdic;
         }
 
-        public static WallpaperInfo SaveArchiveCover(Image imginfo, BingConverStory converStory)
+        public static WallpaperInfoPo SaveArchiveCover(Image imginfo, BingConverStory converStory)
         {
-            WallpaperInfo winfo = new WallpaperInfo()
+            WallpaperInfoPo winfo = new WallpaperInfoPo()
             {
                 WallpaperNo = imginfo.Enddate,
                 Title = converStory?.Title,
@@ -145,7 +141,7 @@ namespace SqliteManager
         }
 
 
-        public static WallpaperInfo GetDaysWallpaperInfo(string dateNo)
+        public static WallpaperInfoPo GetDaysWallpaperInfo(string dateNo)
         {
             using (var conn = new SQLiteConnection(new SQLitePlatformWinRT(), path))
             {
@@ -167,18 +163,18 @@ namespace SqliteManager
                 var afterCreate = conn.Execute(@"UPDATE wallpaperinfo
                                         SET picurl = [replace](picurl, 'http://www.bing.com', ''); ");
 
-                var reswall = conn.Find<WallpaperInfo>(q => q.WallpaperNo == dateNo);
+                var reswall = conn.Find<WallpaperInfoPo>(q => q.WallpaperNo == dateNo);
 
                 return reswall;
             }
         }
 
-        public static List<WallpaperInfo> GetDaysWallpaperInfos(IList<string> dates)
+        public static List<WallpaperInfoPo> GetDaysWallpaperInfos(IList<string> dates)
         {
             IList<string> querylist = dates.Select(q => string.Format("'{0}'", q)).ToList();
             using (var conn = new SQLiteConnection(new SQLitePlatformWinRT(), path))
             {
-                var query = conn.Query<WallpaperInfo>($@"SELECT * FROM wallpaperinfo 
+                var query = conn.Query<WallpaperInfoPo>($@"SELECT * FROM wallpaperinfo 
                                                         WHERE wallpaperno in ({string.Join(",", querylist)}) 
                                                         order by wallpaperno desc");
                 return query.ToList();
@@ -202,7 +198,7 @@ namespace SqliteManager
         {
             using (var conn = new SQLiteConnection(new SQLitePlatformWinRT(), path))
             {
-                var query = conn.Query<WallpaperInfo>(@"SELECT wallpaperno
+                var query = conn.Query<WallpaperInfoPo>(@"SELECT wallpaperno
                                                         FROM wallpaperinfo WHERE wallpaperno=?;", DateTime.Now.ToString("yyyyMMdd"));
 
                 return query.ToList().Count > 0;

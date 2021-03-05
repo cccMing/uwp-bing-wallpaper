@@ -50,7 +50,7 @@ namespace CommonUtil
                 //uwp中用这个httpclient，还有个system.net.http
                 using (var httpclient = new Windows.Web.Http.HttpClient())
                 {
-                    var uri = new System.Uri(url);
+                    var uri = new Uri(url);
 
                     // Retry multiple times, calling an action on each retry 
                     // with the current exception, retry count and context 
@@ -96,7 +96,7 @@ namespace CommonUtil
                 //uwp中用这个httpclient，还有个system.net.http
                 using (var httpclient = new Windows.Web.Http.HttpClient())
                 {
-                    var uri = new System.Uri(url);
+                    var uri = new Uri(url);
 
                     var policy = Policy.Timeout(8, onTimeout: (context, timespan, task) =>
                     {

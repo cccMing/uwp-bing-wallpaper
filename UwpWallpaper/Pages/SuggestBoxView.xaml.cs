@@ -1,19 +1,10 @@
 ﻿using CommonUtil;
-using System;
+using SqliteManager.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UwpWallpaper.BingManager;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
@@ -27,13 +18,13 @@ namespace UwpWallpaper
     {
         string querykey;
 
-        private ObservableCollection<SqliteManager.Models.WallpaperInfo> listInfo;
+        private ObservableCollection<WallpaperInfoPo> listInfo;
 
         public SuggestBoxView()
         {
             this.InitializeComponent();
 
-            listInfo = new ObservableCollection<SqliteManager.Models.WallpaperInfo>();
+            listInfo = new ObservableCollection<WallpaperInfoPo>();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -44,7 +35,7 @@ namespace UwpWallpaper
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            IList<SqliteManager.Models.WallpaperInfo> walls = SqliteManager.SqlQuery.SuggestQuery(querykey);
+            IList<WallpaperInfoPo> walls = SqliteManager.SqlQuery.SuggestQuery(querykey);
 
             int count = 0;
             foreach (var i in walls)
@@ -53,7 +44,7 @@ namespace UwpWallpaper
                 {
                     break;
                 }
-                listInfo.Add(new SqliteManager.Models.WallpaperInfo
+                listInfo.Add(new WallpaperInfoPo
                 {
                     WallpaperNo = Path.Combine(UwpBing.PicFolderPath, i.WallpaperNo + ".jpg"),
                     Title = i.Title + "(" + i.WallpaperNo + ")",
