@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UwpWallpaper.BingManager;
 using UwpWallpaper.Pages;
@@ -14,6 +15,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -41,8 +43,11 @@ namespace UwpWallpaper
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-
-            DatabaseManager.InitializeDatabase();
+            this.UnhandledException += (sender, e) =>
+            {
+                //e.Handled = true;
+                ULogger.Current.LogError($"App UnhandledException:{e.Message}", e.Exception);
+            };
         }
 
         /// <summary>
@@ -127,7 +132,10 @@ namespace UwpWallpaper
 #endif
             #endregion
 
+            DatabaseManager.InitializeDatabase();
+
             RunBeforeSet.Setting();
+
             SetTitleBarStyle();
 
             InitWindow(skipWindowCreation: e.PrelaunchActivated);
@@ -191,9 +199,74 @@ namespace UwpWallpaper
                 Window.Current.Content = _rootPage;
 
                 Window.Current.Activate();
+
+                InitWindowSize();
             }
         }
 
+        /// <summary>
+        /// 初始化应用窗口大小
+        /// </summary>
+        public void InitWindowSize()
+        {
+            var size = GetCurrentDisplaySize();
+            var ratio = 1920d / 1080d;
+
+            var percent = 0.65;
+
+            Size appSize;
+            if (size.Width / size.Height > ratio)
+            {
+                var height = size.Height * percent;
+                appSize = new Size(height * ratio, height);
+            }
+            else
+            {
+                var width = size.Width * percent;
+                appSize = new Size(width, width / ratio);
+            }
+
+            //To get Screen Measurements e.g. height, width, X,Y...
+            //ApplicationView view = ApplicationView.GetForCurrentView();
+            //var top = view.VisibleBounds.Top;
+
+            var screenScale = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel; // windows 设置里面的缩放倍数
+            appSize.Width /= screenScale;
+            appSize.Height /= screenScale;
+            appSize.Height += 64; // 不包括图片的下方区域
+
+            ULogger.Current.Log($"appSize: {appSize.Width} {appSize.Height}");
+            ApplicationView.PreferredLaunchViewSize = appSize; // 这个大小不包括top，也就是标题栏
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize; // 这里可以进行窗口用户设置还是代码设置
+        }
+
+        /// <summary>
+        /// 获取当前桌面大小
+        /// </summary>
+        /// <returns></returns>
+        public static Size GetCurrentDisplaySize()
+        {
+            var displayInformation = DisplayInformation.GetForCurrentView();
+            TypeInfo t = typeof(DisplayInformation).GetTypeInfo();
+            var props = t.DeclaredProperties.Where(x => x.Name.StartsWith("Screen") && x.Name.EndsWith("InRawPixels")).ToArray();
+            var w = props.Where(x => x.Name.Contains("Width")).First().GetValue(displayInformation);
+            var h = props.Where(x => x.Name.Contains("Height")).First().GetValue(displayInformation);
+            var size = new Size(System.Convert.ToDouble(w), System.Convert.ToDouble(h));
+            switch (displayInformation.CurrentOrientation)
+            {
+                case DisplayOrientations.Landscape:
+                case DisplayOrientations.LandscapeFlipped:
+                    size = new Size(Math.Max(size.Width, size.Height), Math.Min(size.Width, size.Height));
+                    break;
+                case DisplayOrientations.Portrait:
+                case DisplayOrientations.PortraitFlipped:
+                    size = new Size(Math.Min(size.Width, size.Height), Math.Max(size.Width, size.Height));
+                    break;
+            }
+
+            // ULogger.Current.Log($"WindowSize: {size.Width} {size.Height}");
+            return size;
+        }
 
         /// <summary>
         /// 标题颜色处理

@@ -23,15 +23,15 @@ namespace UwpWallpaper.ViewModels
             _navigationService = navigationService;
         }
 
-        public async Task GetImageListAsync()
+        public void GetImageListAsync()
         {
-            await WallpaperManager.GetWallpaperList(GalleryList, false);
+            WallpaperManager.GetWallpaperList(GalleryList, false);
         }
 
-        public async Task GetFavoriteImageListAsync(object sender, RoutedEventArgs e)
+        public void GetFavoriteImageListAsync(object sender, RoutedEventArgs e)
         {
             bool isChecked = (bool)(e.OriginalSource as AppBarToggleButton)?.IsChecked;
-            await WallpaperManager.GetWallpaperList(GalleryList, isChecked);
+            WallpaperManager.GetWallpaperList(GalleryList, isChecked);
         }
 
         public ObservableCollection<Photo> GalleryList;

@@ -10,7 +10,7 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <DataTemplate x:DataType="data:WallpaperInfo" x:Key="ListViewTemplate">
+        <DataTemplate x:DataType="data:WallpaperInfoPo" x:Key="ListViewTemplate">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />

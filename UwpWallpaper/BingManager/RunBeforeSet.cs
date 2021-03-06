@@ -30,11 +30,10 @@ namespace UwpWallpaper.BingManager
         /// <returns></returns>
         private static async Task CheckFolderCreatedAsync()
         {
-            var path = Path.Combine(UwpBing.Folder.Path, ConstantObj.BINGFOLDER);
-            if (!Directory.Exists(path))
-            {
-                await UwpBing.Folder.CreateBingdataFolderIfNotExist();
-            }
+            //if (!Directory.Exists(UwpBing.PicFolderPath))
+            //{
+            //    await UwpBing.Folder.CreateBingdataFolderIfNotExist();
+            //}
         }
     }
 }

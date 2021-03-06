@@ -41,12 +41,12 @@ namespace UwpWallpaper.Pages.UserControls
 
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            await WallpaperSetting.SetWallpaper(ImgId, BackgroundEnum.Destop);
+            await WallpaperSetting.SetWallpaperAsync(ImgId, BackgroundEnum.Destop);
         }
 
         private async void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            await WallpaperSetting.SetWallpaper(ImgId, BackgroundEnum.LockScreen);
+            await WallpaperSetting.SetWallpaperAsync(ImgId, BackgroundEnum.LockScreen);
         }
         
         private async void ContentDialog_Loading(FrameworkElement sender, object args)

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CommonUtil
 {
-    public class UwpConverter
+    /// <summary>
+    /// 公共工具
+    /// </summary>
+    public class Tools
     {
         public static double ToDouble(string dec)
         {

@@ -23,5 +23,7 @@ namespace UwpWallpaper.Services.Navigation
         Task NavigateToGalleryAsync();
 
         Task NavigateToTestAsync();
+
+        Task NavigateToDebugWindow();
     }
 }

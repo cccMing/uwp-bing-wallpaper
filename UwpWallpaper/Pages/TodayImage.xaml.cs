@@ -39,6 +39,7 @@ namespace UwpWallpaper.Pages
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            ULogger.Current.Log($"TodayImage Page_Loaded {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}");
             if (string.IsNullOrEmpty(passid))
                 await ViewModel.GetDaysImageInfoAsync(15);
             else
@@ -47,6 +48,7 @@ namespace UwpWallpaper.Pages
             this.MyProgress.IsActive = false;
 
             SetDescriptionWidth((sender as TodayImage).ActualWidth);
+            ULogger.Current.Log($"TodayImage Page_Loaded End {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}");
         }
 
         /// <summary>

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SQLite.Net.Attributes;
+﻿using SQLite.Net.Attributes;
 
 namespace SqliteManager.Models
 {
     /// <summary>
     /// 数据库wallpaperinfo对应的model
     /// </summary>
-    public class WallpaperInfo
+    [Table("WallpaperInfo")]
+    public class WallpaperInfoPo
     {
         [PrimaryKey, AutoIncrement]
         [Column("id")]

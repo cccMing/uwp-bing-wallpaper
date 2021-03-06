@@ -1,16 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Storage;
-using Windows.Storage.Streams;
 
 namespace CommonUtil
 {
     public class UwpBing
     {
+        /// <summary>
+        /// 图片存放所在文件夹名
+        /// </summary>
+        public const string BING_FOLDER = "bingdata";
+
         /// <summary>
         /// 获取本地应用程序数据存储区中的根文件夹。 文件夹已备份到云。
         /// </summary>
@@ -18,10 +20,21 @@ namespace CommonUtil
             => ApplicationData.Current.LocalFolder;
 
         /// <summary>
+        /// 应用数据存储路径
+        /// </summary>
+        public static string FolderPath
+            => Folder.Path;
+
+        public static IAsyncOperation<StorageFolder> GetPicStorageFolder()
+        {
+            return Folder.CreateFolderAsync(BING_FOLDER, CreationCollisionOption.OpenIfExists);
+        }
+
+        /// <summary>
         /// 图片文件存放路径xxx\LocalState\bingdata
         /// </summary>
-        public static string CurrentStorgePath
-            => Path.Combine(UwpBing.Folder.Path, ConstantObj.BINGFOLDER);
+        public static string PicFolderPath
+            => Path.Combine(FolderPath, BING_FOLDER);
 
         /// <summary>
         /// 以buffer的形式写入图片信息
@@ -44,30 +57,28 @@ namespace CommonUtil
 
 #endif
             #region Picture Save
-            StorageFolder saveFolder = await UwpBing.Folder.CreateBingdataFolderIfNotExist();
-            StorageFile saveFile = await saveFolder.CreateFileAsync($"{picNo}.jpg", CreationCollisionOption.OpenIfExists);
+
+            var picStorageFolder = await GetPicStorageFolder();
+            StorageFile saveFile = await picStorageFolder.CreateFileAsync($"{picNo}.jpg", CreationCollisionOption.OpenIfExists);
             try
             {
                 string downloadUrl = url.GetFullDownloadPicUrl();
-                Uri uri = new Uri(downloadUrl);
 
-                using (Windows.Web.Http.HttpClient http = new Windows.Web.Http.HttpClient())
+                var buffer = await DownloadHelper.HttpGetBufferAsync(downloadUrl);
+                if (buffer.Length == 0)
                 {
-                    IBuffer buffer = await http.GetBufferAsync(uri);
-                    if (buffer.Length == 0)
-                    {
-                        throw new Exception("get pic buffer empty");
-                    }
-                    await FileIO.WriteBufferAsync(saveFile, buffer);
+                    throw new Exception($"get pic buffer empty: {downloadUrl}");
                 }
+                await FileIO.WriteBufferAsync(saveFile, buffer);
             }
             catch (Exception ex)
             {
                 await saveFile.DeleteAsync();
-                ULogger.Current.LogError("WallpaperDownload", ex.Message);
+                ULogger.Current.LogError("UwpBing WallpaperDownload", ex);
                 return false;
             }
             return true;
+
             #endregion
         }
 
@@ -76,16 +87,38 @@ namespace CommonUtil
         /// </summary>
         /// <param name="path"></param>
         /// <returns>true 存在</returns>
-        public static async Task<bool> IsFileExist(string path)
+        public static bool IsFileExist(string path)
         {
             if (File.Exists(path))
             {
-                var filebytes = await File.ReadAllBytesAsync(path);
-                if (filebytes.Length > 0)//文件存在并且文件里面有数据
+                if (new FileInfo(path).Length > 0)//文件存在并且文件里面有数据
                 {
                     return true;
                 }
             }
+            return false;
+        }
+
+        /// <summary>
+        /// 判断图片存在并且文件里面有数据
+        /// </summary>
+        /// <param name="picName"></param>
+        /// <param name="filePath">成功情况下的文件路径</param>
+        /// <returns>图片路径</returns>
+        public static bool IsPicExist(string picName, out string filePath)
+        {
+            if (!picName.EndsWith(".jpg") && int.TryParse(picName, out var _))
+            {
+                picName += ".jpg";
+            }
+
+            filePath = Path.Combine(PicFolderPath, picName);
+            if (IsFileExist(filePath))
+            {
+                return true;
+            }
+
+            filePath = null;
             return false;
         }
     }

@@ -81,6 +81,8 @@
         <!--存储-->
         <TextBlock x:Uid="Setting_Storage" Grid.Row="4" Style="{ThemeResource SettingHeaderStyle}" />
         <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+            <ProgressRing Name="StorageProgressRing" IsActive="True" Width="19" Height="19"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{x:Bind ViewModel.DataStorage, Mode=OneWay}" Style="{StaticResource SettingContentStyle}" />
             <Button x:Uid="Setting_ClearCache" Margin="10" Click="{x:Bind ViewModel.ClearCache_Click}" Visibility="Visible" />
         </StackPanel>
@@ -96,8 +98,31 @@
 
         <!--提示-->
         <TextBlock x:Uid="Setting_Explanation" Grid.Row="7" Style="{ThemeResource SettingHeaderStyle}" />
-        <TextBlock x:Uid="Setting_ExplanationInfo" TextWrapping="Wrap" MaxWidth="400" Style="{ThemeResource SettingContentStyle}"
-                   Name="ExplanationTextBlock" Grid.Row="7" Grid.Column="1" />
+        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
+            <TextBlock x:Uid="Setting_ExplanationInfo" TextWrapping="Wrap" MaxWidth="400" Style="{ThemeResource SettingContentStyle}"
+                   Name="ExplanationTextBlock" />
+            <Button Click="RateBtn_Click" Tag="Rate" Content="🐱‍🏍" FontWeight="Normal" FontSize="50" Background="Transparent"
+                    Margin="16" MinWidth="60" MinHeight="60">
+                <!--<Button.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.ThemeDictionaries>
+                            <ResourceDictionary x:Key="Light">
+                                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="Red"/>
+                            </ResourceDictionary>
+                        </ResourceDictionary.ThemeDictionaries>
+                    </ResourceDictionary>
+                </Button.Resources>-->
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout>
+                        <StackPanel>
+                            <TextBlock x:Uid="Rate_Flyout_TextBlock" Style="{ThemeResource BaseTextBlockStyle}" MaxWidth="290" 
+                                       TextWrapping="Wrap" Margin="0,0,0,12" />
+                            <Button x:Uid="Rate_Flyout_Button" HorizontalAlignment="Right" Click="ReviewApp_Button_Click" />
+                        </StackPanel>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </Button>
+        </StackPanel>
 
     </Grid>
 </Page>

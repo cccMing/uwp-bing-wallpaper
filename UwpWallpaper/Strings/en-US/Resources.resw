@@ -222,7 +222,8 @@
     <comment>Copyright</comment>
   </data>
   <data name="Setting_CopyRightInfo.Text" xml:space="preserve">
-    <value>The data source for all wallpapers of this application is from Microsoft Bing. It is for learning and communication only 🙂.</value>
+    <value>The data source for all wallpapers of this application is from Microsoft Bing
+It is for learning and communication only.</value>
     <comment>The data source for all wallpapers of this application is from Microsoft Bing. It is for learning and communication only 🙂.</comment>
   </data>
   <data name="Setting_Explanation.Text" xml:space="preserve">
@@ -300,6 +301,10 @@
   <data name="TryAgainLater" xml:space="preserve">
     <value>Please try again later</value>
     <comment>Please try again later</comment>
+  </data>
+  <data name="ViewSomePic_MenuItem_4kDownload.Text" xml:space="preserve">
+    <value>4K Download</value>
+    <comment>4K Download</comment>
   </data>
   <data name="ViewSomePic_MenuItem_Delete.Text" xml:space="preserve">
     <value>Delete</value>

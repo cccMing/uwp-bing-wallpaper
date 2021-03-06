@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.Helpers;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +12,7 @@ using UwpWallpaper.Util;
 using UwpWallpaper.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Services.Store;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -38,10 +40,65 @@ namespace UwpWallpaper
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                ViewModel.CalcAppStorage();
+                await ViewModel.CalcAppStorageAsync();
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    this.StorageProgressRing.Visibility = Visibility.Collapsed;
+                });
             });
+        }
+
+        /// <summary>
+        /// show flyout
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RateBtn_Click(object sender, RoutedEventArgs e)
+        {
+#if !DEBUG
+            //_navigationService.NavigateToTestAsync();
+            //_navigationService.NavigateToDebugWindow();
+#else
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+#endif
+        }
+
+        private async void ReviewApp_Button_Click(object sender, RoutedEventArgs e)
+        {
+            //https://docs.microsoft.com/zh-cn/windows/uwp/monetize/request-ratings-and-reviews
+
+            //使用跳转商店方式评论
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=9NW3XBW0D1MX"));
+            //if (await ReateApp())
+            //{
+
+            //}
+        }
+
+        /// <summary>
+        /// 内嵌在App中的评论页面，目前没有用到
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> ReateApp()
+        {
+            StoreSendRequestResult result = await StoreRequestHelper.SendRequestAsync(
+                    StoreContext.GetDefault(), 16, String.Empty);
+
+            if (result.ExtendedError == null)
+            {
+                JObject jsonObject = JObject.Parse(result.Response);
+                if (jsonObject.SelectToken("status").ToString() == "success")
+                {
+                    // The customer rated or reviewed the app.
+                    return true;
+                }
+            }
+
+            // There was an error with the request, or the customer chose not to
+            // rate or review the app.
+            return false;
         }
     }
 }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using CommonUtil;
+using Microsoft.QueryStringDotNET;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.UI.Notifications;
-using Microsoft.QueryStringDotNET;
-using Windows.Storage;
-using System.IO;
-using CommonUtil;
 
 namespace NotificationBackgroundTasks
 {
@@ -46,9 +42,9 @@ namespace NotificationBackgroundTasks
                             break;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    ULogger.Current.LogError("NotifyTask Run", ex);
                 }
             }
 
@@ -64,18 +60,19 @@ namespace NotificationBackgroundTasks
 
             _cancelRequested = true;
 
+            ULogger.Current.Log($"{nameof(NotifyTask)} OnCanceled clicked");
+
             //Debug.WriteLine("Background " + sender.Task.Name + " Cancel Requested...");
         }
 
         private async Task SetDesktopWallpaper(string imgId)
         {
-            var path = UwpBing.Folder.Path;
-
             //获取文件
-            Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromPathAsync(Path.Combine(path, ConstantObj.BINGFOLDER, $"{imgId}.jpg"));
+            Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromPathAsync(Path.Combine(UwpBing.PicFolderPath, $"{imgId}.jpg"));
             //设置背景
             Windows.System.UserProfile.UserProfilePersonalizationSettings setting = Windows.System.UserProfile.UserProfilePersonalizationSettings.Current;
             bool b = await setting.TrySetWallpaperImageAsync(file);
+            ULogger.Current.Log($"NotifyTask SetDesktopWallpaper:{b}");
         }
     }
 }

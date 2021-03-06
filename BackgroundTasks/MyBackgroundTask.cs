@@ -1,17 +1,14 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+﻿using CommonUtil;
+using Microsoft.QueryStringDotNET;
+using Microsoft.Toolkit.Uwp.Notifications;
+using SqliteManager;
+using SqliteManager.Models;
 using System;
-using System.IO;
-using System.Net.Http;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
-using Windows.Storage;
-using Windows.Storage.Streams;
-using Windows.UI.Notifications;
-using SqliteManager;
-using System.Collections.Generic;
-using Microsoft.QueryStringDotNET;
 using Windows.ApplicationModel.Resources;
-using CommonUtil;
+using Windows.UI.Notifications;
 
 namespace BackgroundTasks
 {
@@ -28,18 +25,17 @@ namespace BackgroundTasks
 
             try
             {
-                SqliteManager.Models.WallpaperInfo wallpaperInfo = await DownLoadTodayWallpaperIfNotExist();
+                WallpaperInfoPo wallpaperInfo = await DownloadTodayWallpaperIfNotExist();
                 ToastNotification(wallpaperInfo);
-                await SetDestopWallpaper();
-                await UpdateTileAsync();
-                await DownLoadPrevMissiingWallpaperInfo();
-                await DownLoadPrevMissiingWallpaper();
-                //throw new Exception("xxxxxxeee");
+                await SetDestopWallpaperAsync();
+                UpdateTile();
+                await DownloadPrevMissingWallpaperInfoAsync();
+                await DownloadPrevMissingWallpaperAsync();
             }
             catch (Exception ex)
             {
-                //异常不能 记录到日志
-                ULogger.Current.LogError("MyBackgroundTask", ex.Message);
+                //异常不能 记录到日志，用nlog后已经解决，可能是配置路径问题
+                ULogger.Current.LogError("MyBackgroundTask Run", ex);
             }
 
             _deferral.Complete();
@@ -47,44 +43,45 @@ namespace BackgroundTasks
 
         //写为public会导致:严重性	代码	说明	项目	文件	行	禁止显示状态
         //错误 Method 'BackgroundTasks.MyBackgroundTask.UpdateTileAsync()' has a parameter of type 'System.Threading.Tasks.Task' in its signature.Although this type is not a valid Windows Runtime type, it implements interfaces that are valid Windows Runtime types.Consider changing the method signature to use one of the following types instead: ''.	BackgroundTasks C:\Users\John\source\repos\UwpWallpaper\BackgroundTasks\MyBackgroundTask.cs 38	
-        private async Task UpdateTileAsync()
+        //磁贴图片轮播
+        private void UpdateTile()
         {
-            StorageFolder saveFolder = await UwpBing.Folder.CreateBingdataFolderIfNotExist();
             var random = new Random();
-            string filepath = Path.Combine(saveFolder.Path, "111.abc");
+            string filepath;
+            var selectedPicName = "111.abc";
             int trytimes = 0;
-            while (!File.Exists(filepath))
+
+            while (!UwpBing.IsPicExist(selectedPicName, out filepath))
             {
                 if (trytimes++ > 6)
                 {
                     return;
                 }
-                string dt = DateHelper.GetDateStr((-1) * random.Next(30));
-                filepath = Path.Combine(saveFolder.Path, $"{dt}.jpg");
+                selectedPicName = DateHelper.GetDateStr((-1) * random.Next(30));
             }
-            TileContent content = new TileContent()
+
+            TileContent content = new TileContent
             {
-                Visual = new TileVisual()
+                Visual = new TileVisual
                 {
                     Branding = TileBranding.Name,
                     DisplayName = "BingWallpaper",
-
-                    TileMedium = new TileBinding()
+                    TileMedium = new TileBinding
                     {
-                        Content = new TileBindingContentAdaptive()
+                        Content = new TileBindingContentAdaptive
                         {
-                            BackgroundImage = new TileBackgroundImage()
+                            BackgroundImage = new TileBackgroundImage
                             {
                                 HintCrop = TileBackgroundImageCrop.Default,
                                 Source = filepath
                             }
                         }
                     },
-                    TileWide = new TileBinding()
+                    TileWide = new TileBinding
                     {
-                        Content = new TileBindingContentAdaptive()
+                        Content = new TileBindingContentAdaptive
                         {
-                            BackgroundImage = new TileBackgroundImage()
+                            BackgroundImage = new TileBackgroundImage
                             {
                                 HintCrop = TileBackgroundImageCrop.Default,
                                 Source = filepath
@@ -106,9 +103,9 @@ namespace BackgroundTasks
         /// windows通知
         /// </summary>
         /// <param name="wallpaperInfo"></param>
-        private void ToastNotification(SqliteManager.Models.WallpaperInfo wallpaperInfo)
+        private void ToastNotification(WallpaperInfoPo wallpaperInfo)
         {
-            if(wallpaperInfo == null)
+            if (wallpaperInfo == null)
             {
                 return;
             }
@@ -116,6 +113,8 @@ namespace BackgroundTasks
             var isEnableToast = AppSettings.Current.IsEnableToast;
             var lastOpenDate = AppSettings.Current.LastOpenAppDate;
             var toastDate = AppSettings.Current.ToastDate;
+
+            ULogger.Current.Log($"{nameof(MyBackgroundTask)} ToastNotification [{isEnableToast}] [{lastOpenDate}] [{toastDate}]");
 
             string today = DateHelper.CurrentDateStr;
             if (!isEnableToast)
@@ -133,36 +132,38 @@ namespace BackgroundTasks
 
             AppSettings.Current.ToastDate = today;
 
-            var toastContent = new ToastContent()
+            var toastContent = new ToastContent
             {
-                Visual = new ToastVisual()
+                Visual = new ToastVisual
                 {
-                    BindingGeneric = new ToastBindingGeneric()
+                    BindingGeneric = new ToastBindingGeneric
                     {
                         Children =
                         {
-                            new AdaptiveText()
+                            new AdaptiveText
                             {
                                 Text = new ResourceLoader().GetString("TodayImageUpdated") //"今日美图更新啦♪(^∇^*)"
                             },
-                            new AdaptiveText()
+                            new AdaptiveText
                             {
                                 Text = wallpaperInfo?.CopyRight
                             },
-                            new AdaptiveImage()
+                            new AdaptiveImage
                             {
                                 Source = wallpaperInfo?.PicUrl.GetFullDownloadPicUrl()
                             }
                         }
                     }
                 },
-                Actions = new ToastActionsCustom()
+                Actions = new ToastActionsCustom
                 {
                     Buttons = {//"action=setDesktopBackground&ImgId=123"
-                        new ToastButton(new ResourceLoader().GetString("SetImgAsBackground"), new QueryString(){
-                                        {"action","SetDesktopBackground" },
-                                        {"ImgId", wallpaperInfo.WallpaperNo.ToString()}
-                                        }.ToString())
+                        new ToastButton(
+                            new ResourceLoader().GetString("SetImgAsBackground"),
+                            new QueryString{
+                                {"action","SetDesktopBackground" },
+                                {"ImgId", wallpaperInfo.WallpaperNo.ToString()}
+                            }.ToString())
                         {
                             ActivationType=ToastActivationType.Background
                         },
@@ -185,7 +186,7 @@ namespace BackgroundTasks
             ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
         }
 
-        private async Task<SqliteManager.Models.WallpaperInfo> DownLoadTodayWallpaperIfNotExist()
+        private async Task<WallpaperInfoPo> DownloadTodayWallpaperIfNotExist()
         {
             //以下和主程序中第一次下载一样，有时间下载放一个程序集给两边调用
 
@@ -195,21 +196,22 @@ namespace BackgroundTasks
             if (wallinfo != null)
                 return wallinfo;
 
-            SqliteManager.Models.WallpaperInfo allinfo;
+            WallpaperInfoPo allinfo;
             try
             {
                 //没有的话网络请求
                 string archive = await DownloadHelper.GetTodayWallpaperAsync();
+#if FALSE
                 string coverstory = await DownloadHelper.GetCoverstoryAsync();
-                allinfo = SqlQuery.SaveBingWallpaperInfo(archive, coverstory);
+#endif
+                allinfo = SqlQuery.SaveBingWallpaperInfo(archive, null);
             }
             catch (Exception)
             {
                 return null;
             }
 
-            string filepath = Path.Combine(UwpBing.CurrentStorgePath, $"{todayno}.jpg");
-            if (await IsFileExist(filepath))
+            if (UwpBing.IsPicExist(todayno, out var _))
             {
                 return allinfo;
             }
@@ -220,7 +222,7 @@ namespace BackgroundTasks
             return result ? allinfo : null;
         }
 
-        private async Task<bool> SetDestopWallpaper()
+        private async Task<bool> SetDestopWallpaperAsync()
         {
             if (AppSettings.Current.WallpaperSetDate == DateHelper.CurrentDateStr)
             {
@@ -230,18 +232,19 @@ namespace BackgroundTasks
             {
                 return true;
             }
+
             AppSettings.Current.WallpaperSetDate = DateHelper.CurrentDateStr;
-            return await WallpaperSetting.SetWallpaper(DateHelper.CurrentDateStr, BackgroundEnum.Destop);
+            return await WallpaperSetting.SetWallpaperAsync(DateHelper.CurrentDateStr, BackgroundEnum.Destop);
         }
 
         /// <summary>
         /// 下载之前缺失的图片数据库信息 最多14天
         /// </summary>
         /// <returns></returns>
-        private async Task<int> DownLoadPrevMissiingWallpaperInfo()
+        private async Task<int> DownloadPrevMissingWallpaperInfoAsync()
         {
             IList<string> dayMissings = getMissingDays();
-            if(dayMissings.Count == 0)
+            if (dayMissings.Count == 0)
             {
                 return 0;
             }
@@ -269,54 +272,33 @@ namespace BackgroundTasks
             }
             catch (Exception ex)
             {
-                ULogger.Current.LogError("DownLoadPrevMissiingWallpaperInfo", ex.Message);
+                ULogger.Current.LogError("MyBackgroundTask DownLoadPrevMissiingWallpaperInfo", ex);
                 return 0;
             }
 
             return 1;
         }
 
-        /// <summary>
-        /// 判断文件存在并且文件里面有数据
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private async Task<bool> IsFileExist(string path)
+        private async Task DownloadPrevMissingWallpaperAsync()
         {
-            if (File.Exists(path))
-            {
-                var filebytes = await File.ReadAllBytesAsync(path);
-                if (filebytes.Length > 0)//文件存在并且文件里面有数据
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private async Task DownLoadPrevMissiingWallpaper()
-        {
-            IList<string> days = new List<string>();
             for (var i = 0; i <= 14; i++)
             {
                 var day = DateHelper.GetDateStr(-1 * i);
 
-                string filepath = Path.Combine(UwpBing.CurrentStorgePath, $"{day}.jpg");
-
-                if (await IsFileExist(filepath))
+                if (UwpBing.IsPicExist(day, out var _))
                 {
                     continue;
                 }
 
                 //图片不存在的情况下
                 #region Picture Save
-                SqliteManager.Models.WallpaperInfo winfo = SqlQuery.GetDaysWallpaperInfo(day);
+                WallpaperInfoPo winfo = SqlQuery.GetDaysWallpaperInfo(day);
                 if (!string.IsNullOrEmpty(winfo?.PicUrl))
                 {
                     UwpBing ub = new UwpBing();
                     bool result = await ub.SavePicByBuffer(day, winfo.PicUrl);
                 }
-                #endregion
+#endregion
             }
         }
 

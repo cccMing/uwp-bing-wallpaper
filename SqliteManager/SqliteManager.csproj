@@ -109,7 +109,7 @@
     <Compile Include="SqlQuery.cs" />
     <Compile Include="Models\BingArchive.cs" />
     <Compile Include="Models\BingConverStory.cs" />
-    <Compile Include="Models\WallpaperInfo.cs" />
+    <Compile Include="Models\WallpaperInfoPo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SqliteManager.rd.xml">
       <SubType>Designer</SubType>

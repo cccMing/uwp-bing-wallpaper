@@ -222,7 +222,8 @@
     <comment>版权</comment>
   </data>
   <data name="Setting_CopyRightInfo.Text" xml:space="preserve">
-    <value>此应用所有壁纸的数据资源来源于微软必应，仅用来学习和交流🙂</value>
+    <value>此应用所有壁纸的数据资源来源于微软必应
+仅用来学习和交流</value>
     <comment>此应用所有壁纸的数据资源来源于微软必应，仅作为学习和交流🙂</comment>
   </data>
   <data name="Setting_Explanation.Text" xml:space="preserve">
@@ -300,6 +301,10 @@
   <data name="TryAgainLater" xml:space="preserve">
     <value>请稍后再试</value>
     <comment>请稍后再试</comment>
+  </data>
+  <data name="ViewSomePic_MenuItem_4kDownload.Text" xml:space="preserve">
+    <value>4K 下载</value>
+    <comment>4K 下载</comment>
   </data>
   <data name="ViewSomePic_MenuItem_Delete.Text" xml:space="preserve">
     <value>删除</value>

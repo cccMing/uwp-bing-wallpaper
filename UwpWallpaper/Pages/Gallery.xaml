@@ -13,6 +13,7 @@
 
     <Page.Resources>
         <MenuFlyout x:Key="ImageMenuFlyout">
+            <MenuFlyoutItem x:Uid="ViewSomePic_MenuItem_4kDownload" Click="Button_4kDownload" />
             <MenuFlyoutItem x:Uid="ViewSomePic_MenuItem_UsePhotoOpen" Click="Button_UsePhotoOpen" />
             <MenuFlyoutItem x:Uid="ViewSomePic_MenuItem_SetAsDesktop" Click="Button_SetScreenBackground" />
             <MenuFlyoutItem Name="DelFlyout" x:Uid="ViewSomePic_MenuItem_Delete" Click="Button_DelPicture" />
@@ -44,7 +45,7 @@
                             <Border x:Name="Shadow" />
                             <RelativePanel>
                                 <Image x:Name="Image" Source="{x:Bind ImageUri}" Height="147" Width="250" Margin="12" Tapped="Image_Tapped"
-                                  RightTapped="Image_RightTapped"  FlyoutBase.AttachedFlyout="{StaticResource ImageMenuFlyout}" Stretch="UniformToFill" />
+                                  RightTapped="Image_RightTapped" FlyoutBase.AttachedFlyout="{StaticResource ImageMenuFlyout}" Stretch="UniformToFill" />
                                 <Button Name="{x:Bind ImageId}" FontFamily="Segoe MDL2 Assets" Content="{x:Bind HeartSymbol}" RelativePanel.AlignBottomWithPanel="True"
                                     RelativePanel.AlignRightWithPanel="True" Margin="10" BorderThickness="0" Background="Transparent"
                                     FontSize="20" Foreground="Red" Click="{x:Bind HeartBtn_Click}" Style="{StaticResource CustomButtonStyle}" />

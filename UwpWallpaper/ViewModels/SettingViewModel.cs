@@ -21,10 +21,9 @@ namespace UwpWallpaper.ViewModels
             
         }
 
-        public async void CalcAppStorage()
+        public async Task CalcAppStorageAsync()
         {
             var res = await new StorageHelper().GetAppDataStorageSize();
-            //Thread.Sleep(3000);
             _dataStorage = res.ToString("f2");
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
@@ -110,7 +109,7 @@ namespace UwpWallpaper.ViewModels
                     await new StorageHelper().DeleteAppCache();
                     await Task.Run(() =>
                     {
-                        CalcAppStorage();
+                        CalcAppStorageAsync();
                     });
                 }
                 catch (Exception ex)

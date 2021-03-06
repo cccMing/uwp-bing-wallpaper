@@ -20,7 +20,7 @@ namespace UwpWallpaper.Util
         {
             try
             {
-                var mainpath = UwpBing.Folder.Path;
+                var mainpath = UwpBing.FolderPath;
                 folderList.Add(mainpath);//当前目录
                 await GetFoldersPath(mainpath);//当前目录下文件夹
 
@@ -32,7 +32,7 @@ namespace UwpWallpaper.Util
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                ULogger.Current.LogError("GetAppDataStorageSize", ex);
                 return -1;
             }
         }
@@ -61,7 +61,6 @@ namespace UwpWallpaper.Util
         /// <returns></returns>
         private async Task<long> GetFolderSize(string folderPath)
         {
-
             // Query all files in the folder. Make sure to add the CommonFileQuery
             // So that it goes through all sub-folders as well
             //var folders = ApplicationData.Current.LocalFolder.CreateFileQuery();
@@ -87,7 +86,7 @@ namespace UwpWallpaper.Util
         public async Task DeleteAppCache()
         {
             //var statePath = UwpBing.Folder.Path;
-            await (await StorageFolder.GetFolderFromPathAsync(UwpBing.CurrentStorgePath)).DeleteAsync();
+            await (await StorageFolder.GetFolderFromPathAsync(UwpBing.PicFolderPath)).DeleteAsync();
             //await (await StorageFile.GetFileFromPathAsync(statePath)).DeleteAsync();
         }
     }

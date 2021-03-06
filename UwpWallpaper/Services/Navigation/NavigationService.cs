@@ -82,6 +82,8 @@ namespace UwpWallpaper.Services.Navigation
 
         public Task NavigateToTestAsync() => NavigateToPage<Test>();
 
+        public Task NavigateToDebugWindow() => NavigateToPage<Debug>();
+
         #endregion
 
 

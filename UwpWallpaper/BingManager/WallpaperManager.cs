@@ -8,16 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using UwpWallpaper;
 using UwpWallpaper.ViewModels;
+using CommonUtil;
+using Windows.Storage;
 
 namespace UwpWallpaper.BingManager
 {
     public class WallpaperManager
     {
-        public async static Task GetWallpaperList(ObservableCollection<Photo> wallpapers, bool isFavorite)
+        public static void GetWallpaperList(ObservableCollection<Photo> wallpapers, bool isFavorite)
         {
-            string path = await FileManager.GetStorePath();
             wallpapers.Clear();
-            List<string> files = await FileManager.GetAllFileInFolder("jpg");
+            List<string> files = GetAllFileInFolder("jpg");
 
             IList<string> favorites = DatabaseManager.GetFavoriteData();
 
@@ -34,6 +35,19 @@ namespace UwpWallpaper.BingManager
                     HeartSymbol = (favorites.Contains(Path.GetFileNameWithoutExtension(q))) ? "\xEB52" : "\xEB51"//喜欢，不喜欢
                 });
             }
+        }
+
+        public static List<string> GetAllFileInFolder(string suffix)
+        {
+            List<string> filenames = new List<string>();
+            foreach (string i in Directory.GetFiles(UwpBing.PicFolderPath))
+            {
+                if (i.EndsWith(suffix))
+                {
+                    filenames.Add(i);
+                }
+            }
+            return filenames;
         }
     }
 }

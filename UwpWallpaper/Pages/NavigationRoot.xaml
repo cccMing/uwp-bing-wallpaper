@@ -19,33 +19,29 @@
         <!--主要呈现的位置-->
         <Frame x:Name="appFrame"/>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Grid.Row="1" >
-            <RadioButton Click="NavigationBtn_Click" Content="TODAY" Tag="Today" 
+        <RelativePanel x:Name="NaviStack" Grid.Row="1">
+            <StackPanel Orientation="Horizontal"
+                        RelativePanel.AlignHorizontalCenterWithPanel="True"
+                        RelativePanel.AlignVerticalCenterWithPanel="True">
+                <RadioButton Click="NavigationBtn_Click" Content="TODAY" Tag="Today" 
                          GroupName="GG" IsChecked="True" Style="{StaticResource NavRadioBtn}" />
-            <!--中间的分隔符-->
-            <TextBlock Text="|" VerticalAlignment="Center" />
-            <RadioButton Click="NavigationBtn_Click" Content="GALLERY" Tag="Gallery"
+                <!--中间的分隔符-->
+                <TextBlock Text="|" VerticalAlignment="Center" />
+                <RadioButton Click="NavigationBtn_Click" Content="GALLERY" Tag="Gallery"
                          GroupName="GG" Style="{StaticResource NavRadioBtn}" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Row="1">
-            <RadioButton Click="NavigationBtn_Click" FontFamily="Segoe MDL2 Assets" Content="&#xE713;" Tag="Setting"
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.AlignVerticalCenterWithPanel="True">
+                <RadioButton Click="NavigationBtn_Click" FontFamily="Segoe MDL2 Assets" Content="&#xE713;" Tag="Setting"
                          GroupName="GG" Style="{StaticResource NavRadioBtn}" MinWidth="60" />
+                <RadioButton x:Name="ScreenChanger" Click="FullScreenBtn_Click" FontFamily="Segoe MDL2 Assets" Content="&#xE740;" Tag="FullScreen"
+                         Style="{StaticResource RadioBtnStyle}" MinWidth="60" />
 
-            <RadioButton Click="RateBtn_Click" FontFamily="Segoe MDL2 Assets" Content="&#xED54;" Tag="Rate"
-                         Style="{StaticResource RadioBtnStyle}" MinWidth="60">
-                <FlyoutBase.AttachedFlyout>
-                    <Flyout>
-                        <StackPanel>
-                            <TextBlock x:Uid="Rate_Flyout_TextBlock" Style="{ThemeResource BaseTextBlockStyle}" MaxWidth="290" 
-                                       TextWrapping="Wrap" Margin="0,0,0,12" />
-                            <Button x:Uid="Rate_Flyout_Button" HorizontalAlignment="Right" Click="ReviewApp_Button_Click" />
-                        </StackPanel>
-                    </Flyout>
-                </FlyoutBase.AttachedFlyout>
-            </RadioButton>
-            <!--EB68,ED54-->
-        </StackPanel>
+                <!---->
+                <!--EB68,ED54-->
+            </StackPanel>
+        </RelativePanel>
     </Grid>
 
 </Page>
